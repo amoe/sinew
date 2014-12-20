@@ -22,7 +22,6 @@
                            {:watched true}
                            ; For some reason you have to do this hack
                            ; in order to supply booleans.
-                           ["plaintext_name = CAST(? AS INTEGER)"
-                            plaintext-name])]
+                           ["plaintext_name = ?" plaintext-name])]
     (when (zero? (first updated))
       (throw (Exception. "unable to find scene")))))
