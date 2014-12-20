@@ -8,7 +8,12 @@
                  ; This postgres driver is not the current version but the
                  ; version recommended by java.jdbc upstream.
                  [postgresql/postgresql "8.4-702.jdbc4"]
+                 [ragtime "0.3.8"]
                  ]
+
+  :plugins [[ragtime/ragtime.lein "0.3.8"]]
+    :ragtime {:migrations ragtime.sql.files/migrations
+              :database "jdbc:postgresql://localhost/amoe?user=amoe"}
   :main ^:skip-aot sinew.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
