@@ -12,17 +12,16 @@
                   :user "amoe"
                   :password "clojure_test"})
 
-; Currently must be run from within the target directory :/
 (defn -main
   [& args]
-  (rename-all-files (first args)))
+  (rename-all-files (first args) (second args)))
 
-(defn rename-all-files [data-path]
+(defn rename-all-files [data-path prefix]
   (let [data (read-string (slurp data-path))]
     (doseq [datum data]
       (let [extension (FilenameUtils/getExtension (:filename datum))]
-        (let [new-name (str (:name datum) "." extension)]
-          (rename-file (:filename datum) new-name)
+        (let [new-name (str prefix "/" (:name datum) "." extension)]
+          (rename-file (str prefix "/" (:filename datum)) new-name)
           (update-name (:name datum)))))))
 
 
