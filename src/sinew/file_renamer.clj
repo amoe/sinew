@@ -24,7 +24,7 @@
       (let [extension (FilenameUtils/getExtension (:filename datum))]
         (let [new-name (str prefix "/" (:name datum) "." extension)]
           (rename-file (str prefix "/" (:filename datum)) new-name)
-          (update-name (:name datum)))))))
+          (update-name (:name datum) (str (:name datum) "." extension)))))))
 
 
 (defn rename-file [old new]
