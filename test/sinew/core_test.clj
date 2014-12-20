@@ -4,10 +4,7 @@
             [clojure.java.jdbc :as j]))
 
 
-(def postgres-db {:subprotocol "postgresql"
-                  :subname "//localhost/amoe"
-                  :user "amoe"
-                  :password "clojure_test"})
+
 
 (deftest a-test
   (testing "Test a static assertion"

@@ -10,6 +10,7 @@
                  [postgresql/postgresql "8.4-702.jdbc4"]
                  [ragtime "0.3.8"]
                  [clj-time "0.8.0"]
+                 [enlive "1.1.5"]
                  ]
 
   :plugins [[ragtime/ragtime.lein "0.3.8"]]
