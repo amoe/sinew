@@ -20,6 +20,9 @@
   (let [updated (j/update! sdata/postgres-db
                            :scene
                            {:watched true}
-                           ["plaintext_name = ?" plaintext-name])]
+                           ; For some reason you have to do this hack
+                           ; in order to supply booleans.
+                           ["plaintext_name = CAST(? AS INTEGER)"
+                            plaintext-name])]
     (when (zero? (first updated))
       (throw (Exception. "unable to find scene")))))
