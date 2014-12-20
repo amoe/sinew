@@ -28,9 +28,10 @@
 
 
 (defn rename-file [old new]
-  (let [result (.renameTo (File. old) (File. new))]
-    (when (not result)
-      (throw (Exception. "failed to rename file")))))
+  (when (not (= old new))
+    (let [result (.renameTo (File. old) (File. new))]
+      (when (not result)
+        (throw (Exception. "failed to rename file"))))))
 
 
 (defn update-name [plaintext-name new-name]
