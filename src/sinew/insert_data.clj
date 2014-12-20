@@ -2,12 +2,20 @@
   (:require [clojure.java.jdbc :as j]
             [clj-time.coerce :as c]))
 
-(declare insert-scene-tag)
+(declare insert-scene-tag
+         read-data-file
+         insert-tags
+         insert-scene
+         insert-tag)
 
 (def postgres-db {:subprotocol "postgresql"
                   :subname "//localhost/amoe"
                   :user "amoe"
                   :password "clojure_test"})
+
+(defn -main
+  [& args]
+  (read-data-file (first args)))
 
 (defn read-data-file [path]
   (let [data (read-string (slurp path))]
