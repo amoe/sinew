@@ -5,7 +5,9 @@
 (import '(java.io File)
         '(org.apache.commons.io FilenameUtils))
 
-(declare rename-file)
+(declare rename-all-files
+         rename-file
+         update-name)
 
 (def postgres-db {:subprotocol "postgresql"
                   :subname "//localhost/amoe"
