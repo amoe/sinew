@@ -1,0 +1,3 @@
+ALTER TABLE scene
+ADD COLUMN watched BOOLEAN;
+
