@@ -18,4 +18,7 @@
    (html/text (first (html/select resource
                #{[:p.story]})))))
 
+(defn extract-tags [resource]
+  (map html/text (html/select resource #{[:div.updatetags :a]})))
+
   
