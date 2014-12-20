@@ -11,7 +11,7 @@
                  [ragtime "0.3.8"]
                  [clj-time "0.8.0"]
                  [enlive "1.1.5"]
-                 ]
+                 [commons-io "2.4"]]
 
   :plugins [[ragtime/ragtime.lein "0.3.8"]]
     :ragtime {:migrations ragtime.sql.files/migrations
