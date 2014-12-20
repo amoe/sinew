@@ -43,6 +43,15 @@
   (:id (first (j/insert! postgres-db :scene_tags {:scene_id scene-id
                                                   :tag_id tag-id}))))
 
+(defn insert-or-return-tag
+  [tag]
+  (let [result (j/query postgres-db
+                        ["SELECT t.id FROM tag t WHERE t.name = ?" tag])]
+    (if (empty? result)
+      (insert-tag tag)
+      (:id (first result)))))
+
+
 (defn insert-tag [name]
   (:id (first (j/insert! postgres-db :tag {:name name}))))
 

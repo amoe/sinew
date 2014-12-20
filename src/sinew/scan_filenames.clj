@@ -2,6 +2,7 @@
   (:require [net.cgrand.enlive-html :as html]
             [clojure.java.io :as io]
             [clojure.string :as string]
+            [clojure.pprint :as pprint]
             [sinew.scan-page]))
 
 (declare scan-files
@@ -19,6 +20,11 @@
          collapse-dashes
          remove-number)
 
+; Two top level functions
+; SCAN-AND-PRINT scans a list of files and fixes them.
+; READ-MODIFIED-LIST reads in the list and gets the changes.
+
+
 (defn read-modified-list [path]
   (let [data (read-string (slurp path))]
     (doseq [rec data]
@@ -35,8 +41,7 @@
            (println (str "Unable to get description for " (:new rec))))))))
 
 (defn scan-and-print [path]
-  (doseq [name (scan-files path)]
-    (prn name)))
+  (pprint/pprint (scan-files path)))
 
 (defn scan-files [path]
   (with-open [rdr (io/reader path)]
@@ -55,7 +60,7 @@
       remove-suffix
       remove-leftover-trailing-dashes
       remove-leftover-leading-dashes
-            remove-number
+      remove-number
       remove-leftover-leading-dashes
       collapse-dashes))
 

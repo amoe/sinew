@@ -26,6 +26,10 @@
           (rename-file (str prefix "/" (:filename datum)) new-name)
           (update-name (:name datum) (str (:name datum) "." extension)))))))
 
+(defn get-extension
+  [path]
+  (FilenameUtils/getExtension path))
+  
 
 (defn rename-file [old new]
   (when (not (= old new))
