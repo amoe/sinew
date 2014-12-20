@@ -28,17 +28,18 @@
   (prn description)
   (prn tags)
 
-  (let [new-name (str prefix
-                      "/"
-                      plaintext-name
-                      "."
-                      (sinew.file-renamer/get-extension filename))]
-    (sinew.file-renamer/rename-file filename new-name)
-    (let [scene-id (sdata/insert-scene nil
-                                       plaintext-name
-                                       plaintext-name
-                                       description)]
-      (insert-all-tags scene-id tags))))
+  (let [extension (sinew.file-renamer/get-extension filename)]
+    (let [new-name (str prefix
+                        "/"
+                        plaintext-name
+                        "."
+                        extension)]
+      (sinew.file-renamer/rename-file filename new-name)
+      (let [scene-id (sdata/insert-scene nil
+                                         plaintext-name
+                                         (str plaintext-name "." extension)
+                                         description)]
+        (insert-all-tags scene-id tags)))))
     
 (defn insert-all-tags
   [scene-id tags]
