@@ -1,12 +1,22 @@
 (ns sinew.core
   (:gen-class)
   (:require [clojure.java.jdbc :as j]
-            [clj-time.coerce :as c]))
+            [clj-time.coerce :as c]
+            [sinew.scan-page :as sp]
+            [sinew.scan-filenames :as sf]))
 
 (def postgres-db {:subprotocol "postgresql"
                   :subname "//localhost/amoe"
                   :user "amoe"
                   :password "clojure_test"})
+
+(defn ack [path]
+  (doseq [name (take 3 (sinew.scan-filenames/scan-files path))]
+    (println (:new name))
+    (prn (sinew.scan-page/extract-tags (sinew.scan-page/get-page (:new name))))))
+             
+    
+  
 
 (defn -main
   "I don't do a whole lot ... yet."

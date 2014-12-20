@@ -1,7 +1,8 @@
 (ns sinew.scan-filenames
   (:require [net.cgrand.enlive-html :as html]
             [clojure.java.io :as io]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [sinew.scan-page]))
 
 (declare scan-filename
          substitute-whitespace
@@ -17,9 +18,24 @@
          collapse-dashes
          remove-number)
 
+(defn read-modified-list [path]
+  (let [data (read-string (slurp path))]
+    (doseq [rec data]
+       (try
+         (let [page (sinew.scan-page/get-page (:new rec))]
+           (let [desc (sinew.scan-page/extract-description page)
+                 tags (sinew.scan-page/extract-tags page)]
+             (let [outrec {:filename (:original rec)
+                           :name (:new rec)
+                           :description desc
+                           :tags tags}]
+               (spit "out.clj"  (str (pr-str outrec) "\n")  :append true))))
+         (catch Exception e
+           (println (str "Unable to get description for " (:new rec))))))))
+
 (defn scan-and-print [path]
   (doseq [name (scan-files path)]
-    (println (:new name))))
+    (prn name)))
 
 (defn scan-files [path]
   (with-open [rdr (io/reader path)]
