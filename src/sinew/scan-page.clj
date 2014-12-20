@@ -3,15 +3,19 @@
             [clojure.java.io :as io]
             [clojure.string :as string]))
 
+(defn get-page [model]
+  (html/html-resource
+   (java.net.URL. (str "b1" model))))
+
 (defn convert-page [path]
   (html/html-resource (io/input-stream path)))
 
 (defn clean-description [desc]
   (string/trim (apply str (filter #(not (= % \newline)) desc))))
 
-(defn extract-description [path]
+(defn extract-description [resource]
   (clean-description
-   (html/text (first (html/select (convert-page path)
+   (html/text (first (html/select resource
                #{[:p.story]})))))
 
   
