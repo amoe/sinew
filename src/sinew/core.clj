@@ -11,12 +11,9 @@
                   :password "clojure_test"})
 
 (defn ack [path]
-  (doseq [name (take 3 (sinew.scan-filenames/scan-files path))]
+  (doseq [name (take 3 (sf/scan-files path))]
     (println (:new name))
-    (prn (sinew.scan-page/extract-tags (sinew.scan-page/get-page (:new name))))))
-             
-    
-  
+    (prn (sp/extract-tags (sp/get-page (:new name))))))
 
 (defn -main
   "I don't do a whole lot ... yet."

@@ -4,7 +4,8 @@
             [clojure.string :as string]
             [sinew.scan-page]))
 
-(declare scan-filename
+(declare scan-files
+         scan-filename
          substitute-whitespace
          lowercase
          substitute-underscore
