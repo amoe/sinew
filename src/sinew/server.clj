@@ -11,7 +11,8 @@
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
   [:ul :li.file] (html/clone-for [file file-list]
-                   [:span.name] (html/content file)))
+                   [:span.name] (html/content file)
+                   [:a.bar] (html/set-attr :href "sdfdskljf")))
 
 (html/deftemplate main-template "templates/index.html" []
   [:head :title] (html/content "bar"))
