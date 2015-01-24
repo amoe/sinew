@@ -5,7 +5,8 @@
             [clojure.pprint :as pprint]
             [sinew.scan-page]
             [sinew.insert-data :as sdata]
-            [sinew.file-renamer]))
+            [sinew.file-renamer]
+            [sinew.data-service :as data]))
 
 (declare insert-scene
          insert-all-tags)
@@ -35,7 +36,7 @@
                         "."
                         extension)]
       (sinew.file-renamer/rename-file filename new-name)
-      (let [scene-id (sdata/insert-scene nil
+      (let [scene-id (data/insert-scene nil
                                          plaintext-name
                                          (str plaintext-name "." extension)
                                          description)]
@@ -44,7 +45,7 @@
 (defn insert-all-tags
   [scene-id tags]
   (doseq [tag tags]
-    (sdata/insert-scene-tag scene-id
-                            (sdata/insert-or-return-tag tag))))
+    (data/insert-scene-tag scene-id
+                           (data/insert-or-return-tag tag))))
                              
 

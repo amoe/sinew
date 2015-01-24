@@ -1,30 +1,16 @@
 (ns sinew.insert-data
   (:require [clojure.java.jdbc :as j]
-            [clj-time.coerce :as c]))
-
-(declare insert-scene-tag
-         read-data-file
-         insert-tags
-         insert-scene
-         insert-tag)
-
-(def postgres-db {:subprotocol "postgresql"
-                  :subname "//vlinder/amoe"
-                  :user "amoe"
-                  :password "clojure_test"})
-
-(defn -main
-  [& args]
-  (read-data-file (first args)))
+            [clj-time.coerce :as c]
+            [sinew.data-service :as data]))
 
 (defn read-data-file [path]
   (let [data (read-string (slurp path))]
     (let [tag-map (insert-tags path)]
       (doseq [datum data]
-        (let [scene-id (insert-scene nil (:name datum) (:filename datum)
-                                     (:description datum))]
+        (let [scene-id (data/insert-scene nil (:name datum) (:filename datum)
+                                          (:description datum))]
           (doseq [tag (:tags datum)]
-            (insert-scene-tag scene-id (get tag-map tag))))))))
+            (data/insert-scene-tag scene-id (get tag-map tag))))))))
 
 (defn insert-tags [path]
   (let [data (read-string (slurp path))]
@@ -34,45 +20,9 @@
         (if (empty? remaining-tags)
           generated-ids
           (let [tag (first remaining-tags)]
-            (let [tag-id (insert-tag tag)]
+            (let [tag-id (data/insert-tag tag)]
               (recur (rest remaining-tags)
                      (assoc generated-ids tag tag-id)))))))))
 
 
-(defn insert-scene-tag [scene-id tag-id]
-  (:id (first (j/insert! postgres-db :scene_tags {:scene_id scene-id
-                                                  :tag_id tag-id}))))
-
-(defn insert-or-return-tag
-  [tag]
-  (let [result (j/query postgres-db
-                        ["SELECT t.id FROM tag t WHERE t.name = ?" tag])]
-    (if (empty? result)
-      (insert-tag tag)
-      (:id (first result)))))
-
-
-(defn insert-tag [name]
-  (:id (first (j/insert! postgres-db :tag {:name name}))))
-
-(defn make-sql-date [year month day]
-  (java.sql.Date.
-   (.getTimeInMillis
-    (java.util.GregorianCalendar. year month day))))
-
-; expects date as string
-(defn insert-scene [date plaintext-name filename description]
-  (:id (first (j/insert! postgres-db
-             :scene
-             {:release_date (c/to-sql-date date)
-              :plaintext_name plaintext-name
-              :filename filename
-              :description description}))))
-             
-  
-
-
-
-
-  
             
