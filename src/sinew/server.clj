@@ -8,14 +8,17 @@
             [prone.middleware :as prone]
             [net.cgrand.enlive-html :as html]))
 
+(html/deftemplate search-result-template "templates/search-result.html"
+  [file-list]
+  [:ul :li.file] (html/clone-for [file file-list]
+                   (html/content file)))
 
 (html/deftemplate main-template "templates/index.html" []
   [:head :title] (html/content "bar"))
 
 (defn render-index [tag-name]
-  {:headers {"Content-Type" "text/plain"}
-   :body (with-out-str
-           (pprint/pprint (select-by-tag/query-by-tag tag-name)))})
+  {:headers {"Content-Type" "text/html"}
+   :body (search-result-template (data/query-by-tag tag-name))})
 
 (defn toggle-watched [filename]
   (data/toggle-watched filename)
