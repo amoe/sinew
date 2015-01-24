@@ -5,15 +5,15 @@
             [compojure.route :as route]
             [sinew.select-by-tag :as select-by-tag]))
 
-(defn render-index []
+(defn render-index [tag-name]
   {:headers {"Content-Type" "text/plain"}
    :body (with-out-str
-           (pprint/pprint (select-by-tag/query-by-tag "some-tag")))})
+           (pprint/pprint (select-by-tag/query-by-tag tag-name)))})
 
 (defroutes app
-  (GET "/" [] (render-index))
-  (GET "/user/:id" [id]
-       (str "<h1>" id "</h1>"))
+  (GET "/" [] "Hello, world!")
+  (GET "/tag/:tag-name" [tag-name]
+       (render-index tag-name))
   (route/not-found "<h1>Page not found</h1>"))
 
 
