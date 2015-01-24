@@ -6,6 +6,6 @@
 
 (defn -main
   [& args]
-  (doseq [filename (data/query-by-tag (first args))]
-    (println filename)))
+  (doseq [result (map :filename (data/query-by-tag (first args)))]
+    (println  result)))
 

@@ -11,8 +11,10 @@
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
   [:ul :li.file] (html/clone-for [file file-list]
-                   [:span.name] (html/content file)
-                   [:a.bar] (html/set-attr :href "sdfdskljf")))
+                   [:span.name] (html/content (:filename file))
+                   [:a.toggle-link] (html/set-attr
+                                     :href (str "/toggle-watched/"
+                                                (:plaintext_name file)))))
 
 (html/deftemplate main-template "templates/index.html" []
   [:head :title] (html/content "bar"))
