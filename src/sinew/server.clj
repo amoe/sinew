@@ -5,7 +5,12 @@
             [compojure.route :as route]
             [sinew.select-by-tag :as select-by-tag]
             [sinew.data-service :as data]
-            [prone.middleware :as prone]))
+            [prone.middleware :as prone]
+            [net.cgrand.enlive-html :as html]))
+
+
+(html/deftemplate main-template "templates/index.html" []
+  [:head :title] (html/content "bar"))
 
 (defn render-index [tag-name]
   {:headers {"Content-Type" "text/plain"}
@@ -19,6 +24,7 @@
 (def app
   (-> (routes
        (GET "/" [] "Hello, world!")
+       (GET "/enlive-demo" [] (main-template))
        (GET "/tag/:tag-name" [tag-name] (render-index tag-name))
        (GET "/toggle-watched/:filename" [filename]
             (toggle-watched filename))
