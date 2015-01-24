@@ -53,10 +53,14 @@
               :plaintext_name plaintext-name
               :filename filename
               :description description}))))
-             
   
-
-
-
-
-  
+(defn toggle-watched
+  [plaintext-name]
+  (let [updated (j/update! postgres-db
+                           :scene
+                           {:watched true}
+                           ; For some reason you have to do this hack
+                           ; in order to supply booleans.
+                           ["plaintext_name = ?" plaintext-name])]
+    (when (zero? (first updated))
+      (throw (Exception. "unable to find scene")))))
