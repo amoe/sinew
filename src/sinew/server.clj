@@ -11,7 +11,7 @@
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
   [:ul :li.file] (html/clone-for [file file-list]
-                   (html/content file)))
+                   [:span.name] (html/content file)))
 
 (html/deftemplate main-template "templates/index.html" []
   [:head :title] (html/content "bar"))
