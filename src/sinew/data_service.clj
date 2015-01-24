@@ -19,10 +19,12 @@
 (defn query-by-tag
   [tag]
   (j/query postgres-db
-           ["SELECT DISTINCT s.filename, s.plaintext_name FROM scene s
+           ["SELECT DISTINCT s.filename, s.plaintext_name, s.watched
+             FROM scene s
              INNER JOIN scene_tags st ON st.scene_id = s.id
              INNER JOIN tag t ON st.tag_id  = t.id
-             WHERE t.name = ?" tag]))
+             WHERE t.name = ?
+             ORDER BY s.plaintext_name" tag]))
 
 (defn insert-scene-tag [scene-id tag-id]
   (:id (first (j/insert! postgres-db :scene_tags {:scene_id scene-id

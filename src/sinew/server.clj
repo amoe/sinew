@@ -12,6 +12,9 @@
   [file-list]
   [:ul :li.file] (html/clone-for [file file-list]
                    [:span.name] (html/content (:filename file))
+                   [:span.watched]
+                   (html/html-content
+                    (if (:watched file) "&#x2713;" "&#x2717;"))
                    [:a.toggle-link] (html/set-attr
                                      :href (str "/toggle-watched/"
                                                 (:plaintext_name file)))))
@@ -20,7 +23,7 @@
   [:head :title] (html/content "bar"))
 
 (defn render-index [tag-name]
-  {:headers {"Content-Type" "text/html"}
+  {:headers {"Content-Type" "text/html; charset=UTF-8"}
    :body (search-result-template (data/query-by-tag tag-name))})
 
 (defn toggle-watched [filename]
