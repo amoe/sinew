@@ -16,6 +16,15 @@
              ["plaintext_name = ?" plaintext-name]))
              
 
+(defn list-all-scenes []
+  (j/query postgres-db
+           ["SELECT s.id, s.release_date, s.plaintext_name, s.filename,
+                    s.description, s.watched
+             FROM scene s"]))
+             
+             
+  
+
 (defn query-by-tag
   [tag]
   (j/query postgres-db

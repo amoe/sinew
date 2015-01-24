@@ -10,7 +10,7 @@
 
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
-  [:ul :li.file] (html/clone-for [file file-list]
+  [:ol :li.file] (html/clone-for [file file-list]
                    [:span.name] (html/content (:filename file))
                    [:span.watched]
                    (html/html-content
@@ -26,6 +26,11 @@
   {:headers {"Content-Type" "text/html; charset=UTF-8"}
    :body (search-result-template (data/query-by-tag tag-name))})
 
+(defn render-list-all []
+  {:headers {"Content-Type" "text/html; charset=UTF-8"}
+   :body (search-result-template (data/list-all-scenes))})
+
+
 (defn toggle-watched [filename]
   (data/toggle-watched filename)
   (str "Toggled watched status for " filename))
@@ -33,6 +38,7 @@
 (def app
   (-> (routes
        (GET "/" [] "Hello, world!")
+       (GET "/list" [] (render-list-all))
        (GET "/enlive-demo" [] (main-template))
        (GET "/tag/:tag-name" [tag-name] (render-index tag-name))
        (GET "/toggle-watched/:filename" [filename]
