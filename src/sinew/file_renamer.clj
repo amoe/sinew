@@ -1,6 +1,7 @@
 (ns sinew.file-renamer
   (:require [clojure.java.jdbc :as j]
-            [clj-time.coerce :as c]))
+            [clj-time.coerce :as c]
+            [sinew.insert-data :as sdata]))
 
 (import '(java.io File)
         '(org.apache.commons.io FilenameUtils))
@@ -8,11 +9,6 @@
 (declare rename-all-files
          rename-file
          update-name)
-
-(def postgres-db {:subprotocol "postgresql"
-                  :subname "//localhost/amoe"
-                  :user "amoe"
-                  :password "clojure_test"})
 
 (defn -main
   [& args]
@@ -39,7 +35,7 @@
 
 
 (defn update-name [plaintext-name new-name]
-  (j/update! postgres-db
+  (j/update! sdata/postgres-db
              :scene
              {:filename new-name}
              ["plaintext_name = ?" plaintext-name]))

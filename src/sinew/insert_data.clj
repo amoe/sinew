@@ -9,7 +9,7 @@
          insert-tag)
 
 (def postgres-db {:subprotocol "postgresql"
-                  :subname "//localhost/amoe"
+                  :subname "//vlinder/amoe"
                   :user "amoe"
                   :password "clojure_test"})
 
