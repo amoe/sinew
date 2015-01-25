@@ -12,7 +12,7 @@
 
 (defn -main
   [& args]
-  (match args
+  (match (into [] args)
     [filename plaintext-name scene-type]       
     (let [page (sinew.scan-page/get-page (keyword scene-type)
                                          plaintext-name)]
@@ -25,8 +25,6 @@
                       scene-type)))
     :else
     (throw (Exception. (str "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE")))))
-        
-
 
 (defn insert-scene
   [filename plaintext-name description tags scene-type]
