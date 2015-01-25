@@ -4,6 +4,7 @@
             [sinew.data-service :as data]))
 
 (import '(java.io File)
+        '(org.apache.commons.io FileUtils)
         '(org.apache.commons.io FilenameUtils))
 
 (declare rename-all-files
@@ -31,8 +32,7 @@
 (defn rename-file [old new]
   (when (not (= old new))
     (println new)
-    (let [result (.renameTo (File. old) (File. new))]
-      (when (not result)        
-        (throw (Exception. (str "failed to rename file: " old)))))))
+    (FileUtils/moveFile (File. old) (File. new))))
+    
 
 
