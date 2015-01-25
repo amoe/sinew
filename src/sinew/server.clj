@@ -32,7 +32,9 @@
                                          :href (str "/toggle-watched/"
                                                     (:plaintext_name file)))
                    [:td.description]
-                   (html/html-content (:description file))))
+                   (html/html-content (:description file))
+                   [:td.scene_type]
+                   (html/html-content (:scene_type file))))
 
 (html/deftemplate main-template "templates/index.html" []
   [:head :title] (html/content "bar"))
