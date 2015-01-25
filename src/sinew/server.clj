@@ -23,14 +23,14 @@
 
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
-  [:ol :li.file] (html/clone-for [file file-list]
-                   [:span.name] (html/content (:filename file))
-                   [:span.watched]
+  [:table :tr.file] (html/clone-for [file file-list]
+                   [:td.name] (html/content (:filename file))
+                   [:td.watched]
                    (html/html-content
                     (if (:watched file) "&#x2713;" "&#x2717;"))
-                   [:a.toggle-link] (html/set-attr
-                                     :href (str "/toggle-watched/"
-                                                (:plaintext_name file)))))
+                   [:td :a.toggle-link] (html/set-attr
+                                         :href (str "/toggle-watched/"
+                                                    (:plaintext_name file)))))
 
 (html/deftemplate main-template "templates/index.html" []
   [:head :title] (html/content "bar"))
