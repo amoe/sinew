@@ -1,0 +1,2 @@
+ALTER TABLE scene
+ADD COLUMN scene_type VARCHAR(80);
