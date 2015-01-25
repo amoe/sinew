@@ -40,8 +40,13 @@
   [file-list]
   [:table :tr.file] (html/clone-for [file file-list]
                    [:td.name] (html/content (:name file))
-                   [:td.tags]
-                   (html/html-content (:tags file))))
+                   [:td.tags :ul :li.tag]
+                   (html/clone-for [tag (:tags file)]
+                     [:a.search-tag-link]
+                     (html/content tag)
+                     [:a.search-tag-link]
+                     (html/set-attr :href (str "/tag/" tag)))))
+
 
 
 (html/deftemplate main-template "templates/index.html" []
