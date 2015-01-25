@@ -63,6 +63,7 @@
              {:release_date (c/to-sql-date date)
               :plaintext_name plaintext-name
               :filename filename
+              :watched false
               :description description}))))
   
 (defn toggle-watched

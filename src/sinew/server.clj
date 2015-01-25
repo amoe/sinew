@@ -1,5 +1,6 @@
 (ns sinew.server
   (:require [ring.adapter.jetty :as jetty]
+            [ring.middleware.params :as wp]
             [clojure.pprint :as pprint]
             [compojure.core :refer :all]
             [compojure.route :as route]
@@ -8,6 +9,17 @@
             [prone.middleware :as prone]
             [net.cgrand.enlive-html :as html]
             [me.raynes.fs :as fs]))
+
+(defn get-mtime [scene]
+  (let [x (fs/mod-time (str
+                "/mnt/nfs/kirk/genre/nasty/adultdoorway/" (:scene_type scene) "/"
+                (:filename scene)))]
+    (if (zero? x)
+      (throw (Exception. (str "unable to get mtime for file: " (:filename scene)))))
+    x))
+
+
+
 
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
@@ -43,21 +55,12 @@
   (data/toggle-watched filename)
   (str "Toggled watched status for " filename))
 
-(defn get-mtime [scene]
-  (let [x (fs/mod-time (str
-                "/mnt/nfs/kirk/genre/nasty/adultdoorway/" (:scene_type scene) "/"
-                (:filename scene)))]
-    (if (zero? x)
-      (throw (Exception. (str "unable to get mtime for file: " (:filename scene)))))
-    x))
 
 
-
-(defn pick-next-scene []
+(defn pick-next-scene [watched?]
    (:plaintext_name
     (first
-     (filter (fn [x] (not (:watched x))) (scenes-sorted-by-mtime)))))
-
+     (filter (fn [x] (= (:watched x) watched?)) (scenes-sorted-by-mtime)))))
 
 (def app
   (-> (routes
@@ -65,12 +68,14 @@
        (GET "/list" [] (render-list-all))
        (GET "/enlive-demo" [] (main-template))
        (GET "/tag/:tag-name" [tag-name] (render-index tag-name))
-       (GET "/next-scene" []
-            (pick-next-scene))
+       (GET "/next-scene" {params :params}
+            (pick-next-scene
+             (Boolean/valueOf (get params "watched"))))
        (GET "/toggle-watched/:filename" [filename]
             (toggle-watched filename))
        (route/not-found "<h1>Page not found</h1>"))
-      prone/wrap-exceptions))
+      prone/wrap-exceptions
+      wp/wrap-params))
 
 
 (defn run []
