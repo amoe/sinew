@@ -57,14 +57,14 @@
    (.getTimeInMillis
     (java.util.GregorianCalendar. year month day))))
 
-; expects date as string
-(defn insert-scene [date plaintext-name filename description]
+(defn insert-scene [date plaintext-name filename description scene_type]
   (:id (first (j/insert! postgres-db
              :scene
              {:release_date (c/to-sql-date date)
               :plaintext_name plaintext-name
               :filename filename
               :watched false
+              :scene_type scene_type
               :description description}))))
   
 (defn toggle-watched
