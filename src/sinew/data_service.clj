@@ -77,3 +77,22 @@
                            ["plaintext_name = ?" plaintext-name])]
     (when (zero? (first updated))
       (throw (Exception. "unable to find scene")))))
+
+(defn get-tag-data-from-db []
+  (j/query postgres-db
+           ["SELECT s.filename, t.name FROM scene s
+             INNER JOIN scene_tags st ON s.id = st.scene_id
+             INNER JOIN tag t ON st.tag_id = t.id
+             "]))
+
+
+(defn get-scenes-with-tags []
+  (map (fn [x] {:name (first x) :tags (second x)})
+       (reduce (fn [acc item]
+                 (update-in acc [(:filename item)]
+                            (fn [old-value]
+                              (conj old-value (:name item)))))
+               {}
+               (get-tag-data-from-db))))
+
+

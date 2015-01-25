@@ -36,6 +36,14 @@
                    [:td.scene_type]
                    (html/html-content (:scene_type file))))
 
+(html/deftemplate view-tags-template "templates/view-tags.html"
+  [file-list]
+  [:table :tr.file] (html/clone-for [file file-list]
+                   [:td.name] (html/content (:name file))
+                   [:td.tags]
+                   (html/html-content (:tags file))))
+
+
 (html/deftemplate main-template "templates/index.html" []
   [:head :title] (html/content "bar"))
 
@@ -54,7 +62,10 @@
   {:headers {"Content-Type" "text/html; charset=UTF-8"}
    :body (search-result-template (scenes-sorted-by-mtime))})
 
-
+(defn render-view-tags []
+  {:headers {"Content-Type" "text/html; charset=UTF-8"}
+   :body (view-tags-template (data/get-scenes-with-tags))})
+  
 (defn toggle-watched [plaintext-name]
   (data/toggle-watched plaintext-name)
   (str "Toggled watched status for " plaintext-name))
@@ -70,6 +81,7 @@
   (-> (routes
        (GET "/" [] (main-template))
        (GET "/list" [] (render-list-all))
+       (GET "/view-tags" [] (render-view-tags))
        (GET "/tag/:tag-name" [tag-name] (render-index tag-name))
        (GET "/next-scene" {params :params}
             (pick-next-scene
