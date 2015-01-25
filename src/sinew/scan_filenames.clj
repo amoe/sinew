@@ -3,6 +3,7 @@
             [clojure.java.io :as io]
             [clojure.string :as string]
             [clojure.pprint :as pprint]
+            [me.raynes.fs :as fs]
             [sinew.scan-page]))
 
 (declare scan-files
@@ -12,8 +13,6 @@
          substitute-underscore
          remove-extension
          remove-resolution
-         remove-prefix
-         remove-sitename
          remove-suffix
          remove-leftover-trailing-dashes
          remove-leftover-leading-dashes
@@ -22,14 +21,14 @@
 
 ; Two top level functions
 ; SCAN-AND-PRINT scans a list of files and fixes them.
+; In the meantime the user modifies the data file in a text editor
 ; READ-MODIFIED-LIST reads in the list and gets the changes.
 
-
-(defn read-modified-list [path]
+(defn read-modified-list [path type]
   (let [data (read-string (slurp path))]
     (doseq [rec data]
        (try
-         (let [page (sinew.scan-page/get-page (:new rec))]
+         (let [page (sinew.scan-page/get-page type (:new rec))]
            (let [desc (sinew.scan-page/extract-description page)
                  tags (sinew.scan-page/extract-tags page)]
              (let [outrec {:filename (:original rec)
@@ -43,20 +42,21 @@
 (defn scan-and-print [path]
   (pprint/pprint (scan-files path)))
 
+(defn scan-directory [dir-path]
+  (doall (map (fn [x] {:original (str x) :new (scan-filename (fs/base-name x))})
+              (file-seq (io/file dir-path)))))
+
 (defn scan-files [path]
   (with-open [rdr (io/reader path)]
-    (doall (map (fn [x] {:original x :new (scan-filename x)})  (line-seq rdr)))))
+    (doall (map (fn [x] {:original x :new (scan-filename (fs/base-name x))})  (line-seq rdr)))))
 
 (defn scan-filename [filename]
   (-> filename
       lowercase
       substitute-whitespace
       substitute-underscore
-            remove-sitename
-
       remove-extension
       remove-resolution
-      remove-prefix
       remove-suffix
       remove-leftover-trailing-dashes
       remove-leftover-leading-dashes
@@ -79,12 +79,6 @@
 
 (defn remove-resolution [str]
   (string/replace str #"\d{3,4}x\d{3,4}" ""))
-
-(defn remove-prefix [str]
-  (string/replace str #"^fa-" ""))
-
-(defn remove-sitename [str]
-  (string/replace str #"sitename(.com)?" ""))
 
 (defn remove-suffix [str]
   (string/replace str #"01$" ""))

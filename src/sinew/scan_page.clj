@@ -3,9 +3,14 @@
             [clojure.java.io :as io]
             [clojure.string :as string]))
 
-(defn get-page [model]
+(def prefixes
+  {:a1 "b1"
+   :a2 "b2"
+   :a3 "b3"})
+
+(defn get-page [type model]
   (html/html-resource
-   (java.net.URL. (str "b1" model))))
+   (java.net.URL. (str (type prefixes) model))))
 
 (defn convert-page [path]
   (html/html-resource (io/input-stream path)))

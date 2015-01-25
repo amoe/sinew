@@ -4,7 +4,6 @@
             [clojure.string :as string]
             [clojure.pprint :as pprint]
             [sinew.scan-page]
-            [sinew.insert-data :as sdata]
             [sinew.file-renamer]
             [sinew.data-service :as data]))
 
@@ -12,7 +11,6 @@
          insert-all-tags)
 
 (def prefix "/mnt/mydrive/videos")
-
 
 (defn -main
   [& args]

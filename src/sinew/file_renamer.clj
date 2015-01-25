@@ -19,7 +19,7 @@
     (doseq [datum data]
       (let [extension (FilenameUtils/getExtension (:filename datum))]
         (let [new-name (str prefix "/" (:name datum) "." extension)]
-          (rename-file (str prefix "/" (:filename datum)) new-name)
+          (rename-file (:filename datum) new-name)
           (data/update-name
            (:name datum) (str (:name datum) "." extension)))))))
 
