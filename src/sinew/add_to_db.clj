@@ -2,7 +2,8 @@
   (:require [clojure.pprint :as pprint]
             [sinew.scan-page]
             [sinew.file-renamer]
-            [sinew.data-service :as data]))
+            [sinew.data-service :as data]
+            [clojure.core.match :refer [match]]))
 
 (declare insert-scene
          insert-all-tags)
@@ -11,9 +12,8 @@
 
 (defn -main
   [& args]
-  (let [filename (first args)
-        plaintext-name (second args)
-        scene-type (third args)]
+  (match args
+    [filename plaintext-name scene-type]       
     (let [page (sinew.scan-page/get-page (keyword scene-type)
                                          plaintext-name)]
       (let [description (sinew.scan-page/extract-description page)
@@ -22,7 +22,10 @@
                       plaintext-name
                       description
                       tags
-                      scene-type)))))
+                      scene-type)))
+    :else
+    (throw (Exception. (str "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE")))))
+        
 
 
 (defn insert-scene

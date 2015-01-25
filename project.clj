@@ -16,7 +16,8 @@
                  [ring/ring-jetty-adapter "1.3.2"]
                  [compojure "1.3.1"]
                  [prone "0.8.0"]
-                 [me.raynes/fs "1.4.6"]]
+                 [me.raynes/fs "1.4.6"]
+                 [org.clojure/core.match "0.3.0-alpha4"]]
 
   :plugins [[ragtime/ragtime.lein "0.3.8"]]
   :ragtime {:migrations ragtime.sql.files/migrations
