@@ -55,9 +55,9 @@
    :body (search-result-template (scenes-sorted-by-mtime))})
 
 
-(defn toggle-watched [filename]
-  (data/toggle-watched filename)
-  (str "Toggled watched status for " filename))
+(defn toggle-watched [plaintext-name]
+  (data/toggle-watched plaintext-name)
+  (str "Toggled watched status for " plaintext-name))
 
 
 
@@ -68,15 +68,14 @@
 
 (def app
   (-> (routes
-       (GET "/" [] "Hello, world!")
+       (GET "/" [] (main-template))
        (GET "/list" [] (render-list-all))
-       (GET "/enlive-demo" [] (main-template))
        (GET "/tag/:tag-name" [tag-name] (render-index tag-name))
        (GET "/next-scene" {params :params}
             (pick-next-scene
              (Boolean/valueOf (get params "watched"))))
-       (GET "/toggle-watched/:filename" [filename]
-            (toggle-watched filename))
+       (GET "/toggle-watched/:name" [name]
+            (toggle-watched name))
        (route/not-found "<h1>Page not found</h1>"))
       prone/wrap-exceptions
       wp/wrap-params))
