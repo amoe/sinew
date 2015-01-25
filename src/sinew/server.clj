@@ -30,7 +30,9 @@
                     (if (:watched file) "&#x2713;" "&#x2717;"))
                    [:td :a.toggle-link] (html/set-attr
                                          :href (str "/toggle-watched/"
-                                                    (:plaintext_name file)))))
+                                                    (:plaintext_name file)))
+                   [:td.description]
+                   (html/html-content (:description file))))
 
 (html/deftemplate main-template "templates/index.html" []
   [:head :title] (html/content "bar"))

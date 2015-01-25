@@ -28,7 +28,8 @@
 (defn query-by-tag
   [tag]
   (j/query postgres-db
-           ["SELECT DISTINCT s.filename, s.plaintext_name, s.watched, s.scene_type
+           ["SELECT s.filename, s.plaintext_name, s.watched, s.scene_type,
+                    s.description
              FROM scene s
              INNER JOIN scene_tags st ON st.scene_id = s.id
              INNER JOIN tag t ON st.tag_id  = t.id
