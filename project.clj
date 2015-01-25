@@ -19,9 +19,11 @@
                  [me.raynes/fs "1.4.6"]
                  [org.clojure/core.match "0.3.0-alpha4"]]
 
-  :plugins [[ragtime/ragtime.lein "0.3.8"]]
+  :plugins [[ragtime/ragtime.lein "0.3.8"]
+            [lein-ring "0.9.1"]]
   :ragtime {:migrations ragtime.sql.files/migrations
             :database "jdbc:postgresql://vlinder/amoe?user=amoe"}
+  :ring {:handler sinew.server/app}
   :main ^:skip-aot sinew.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
