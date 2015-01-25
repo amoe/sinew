@@ -12,7 +12,7 @@
 
 (defn get-mtime [scene]
   (let [x (fs/mod-time (str
-                "/mnt/nfs/kirk/genre/nasty/adultdoorway/" (:scene_type scene) "/"
+                "/mnt/mydrive/videos/" (:scene_type scene) "/"
                 (:filename scene)))]
     (if (zero? x)
       (throw (Exception. (str "unable to get mtime for file: " (:filename scene)))))
