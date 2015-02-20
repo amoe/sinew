@@ -11,9 +11,9 @@
 (defn get-page [type model]
   (let [resolve-url (type prefixes)]
     (if-not resolve-url
-      (throw (Exception. "unknown scene type" type)))
+      (throw (Exception. (str "unknown scene type: " type))))
     (html/html-resource
-     (java.net.URL. (str (type prefixes) model)))))
+     (java.net.URL. (str resolve-url model)))))
 
 (defn convert-page [path]
   (html/html-resource (io/input-stream path)))
