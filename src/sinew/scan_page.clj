@@ -3,6 +3,7 @@
             [clojure.java.io :as io]
             [clojure.string :as string]))
 
+
 (def prefixes
   {:a1 "b1"
    :a2 "b2"
@@ -12,9 +13,12 @@
   (let [resolve-url (type prefixes)]
     (if-not resolve-url
       (throw (Exception. (str "unknown scene type: " type))))
-    (html/html-resource
-     (java.net.URL. (str resolve-url model)))))
-
+    (try
+      (html/html-resource
+       (java.net.URL. (str resolve-url model)))
+      (catch java.io.FileNotFoundException e
+        (throw (ex-info "Scene not found" {:type :scene-not-found}))))))
+  
 (defn convert-page [path]
   (html/html-resource (io/input-stream path)))
 
