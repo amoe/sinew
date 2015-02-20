@@ -17,7 +17,8 @@
                  [compojure "1.3.1"]
                  [prone "0.8.0"]
                  [me.raynes/fs "1.4.6"]
-                 [org.clojure/core.match "0.3.0-alpha4"]]
+                 [org.clojure/core.match "0.3.0-alpha4"]
+                 [org.clojure/tools.cli "0.3.1"]]
 
   :plugins [[ragtime/ragtime.lein "0.3.8"]
             [lein-ring "0.9.1"]]

@@ -3,7 +3,8 @@
             [sinew.scan-page]
             [sinew.file-renamer]
             [sinew.data-service :as data]
-            [clojure.core.match :refer [match]])
+            [clojure.core.match :refer [match]]
+            [clojure.tools.cli :as cli])
   (:gen-class :main true))
 
 (declare insert-scene
@@ -11,21 +12,29 @@
 
 (def prefix "/mnt/mydrive/videos")
 
+(def cli-options
+  [["-f" "--force" "Force addition even if scene not found"]])
+
+
 (defn -main
   [& args]
-  (match (into [] args)
-    [filename plaintext-name scene-type]       
-    (let [page (sinew.scan-page/get-page (keyword scene-type)
-                                         plaintext-name)]
-      (let [description (sinew.scan-page/extract-description page)
-            tags (sinew.scan-page/extract-tags page)]
-        (insert-scene filename
-                      plaintext-name
-                      description
-                      tags
-                      scene-type)))
-    :else
-    (throw (Exception. (str "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE")))))
+  
+  (let [opts (cli/parse-opts args cli-options)]
+    (prn opts)
+    (match (:arguments opts)
+      [filename plaintext-name scene-type]
+      (let [page (sinew.scan-page/get-page (keyword scene-type)
+                                           plaintext-name)]
+        (let [description (sinew.scan-page/extract-description page)
+              tags (sinew.scan-page/extract-tags page)]
+          (insert-scene filename
+                        plaintext-name
+                        description
+                        tags
+                        scene-type)))
+      :else
+      (throw (Exception. (str "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE"))))))
+
 
 (defn insert-scene
   [filename plaintext-name description tags scene-type]
