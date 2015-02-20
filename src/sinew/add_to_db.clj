@@ -3,7 +3,8 @@
             [sinew.scan-page]
             [sinew.file-renamer]
             [sinew.data-service :as data]
-            [clojure.core.match :refer [match]]))
+            [clojure.core.match :refer [match]])
+  (:gen-class :main true))
 
 (declare insert-scene
          insert-all-tags)

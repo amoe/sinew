@@ -24,6 +24,6 @@
   :ragtime {:migrations ragtime.sql.files/migrations
             :database "jdbc:postgresql://vlinder/amoe?user=amoe"}
   :ring {:handler sinew.server/app}
-  :main ^:skip-aot sinew.core
+  :main sinew.add-to-db
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
