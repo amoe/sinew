@@ -9,8 +9,11 @@
    :a3 "b3"})
 
 (defn get-page [type model]
-  (html/html-resource
-   (java.net.URL. (str (type prefixes) model))))
+  (let [resolve-url (type prefixes)]
+    (if-not resolve-url
+      (throw (Exception. "unknown scene type" type)))
+    (html/html-resource
+     (java.net.URL. (str (type prefixes) model)))))
 
 (defn convert-page [path]
   (html/html-resource (io/input-stream path)))
