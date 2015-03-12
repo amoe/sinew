@@ -27,9 +27,9 @@
                         plaintext-name
                         (:description scene-info)
                         (:tags scene-info)
-                        scene-type)))
+                        scene-type))
       :else
-      (throw (Exception. (str "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE")))))
+      (throw (Exception. (str "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE"))))))
 
 (defn retrieve-scene-info
   [plaintext-name scene-type opts]
@@ -44,7 +44,6 @@
       (if (:force (:options opts))
         {:description (:description (:options opts)) :tags []}
         (throw e)))))
-
 
 
 (defn insert-scene
