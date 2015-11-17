@@ -78,6 +78,14 @@
     (when (zero? (first updated))
       (throw (Exception. "unable to find scene")))))
 
+(defn set-rating [plaintext-name rating]
+  (let [updated (j/update! postgres-db
+                           :scene
+                           {:rating rating}
+                           ["plaintext_name = ?" plaintext-name])]
+    (when (zero? (first updated))
+      (throw (Exception. "unable to find scene")))))
+
 (defn get-tag-data-from-db []
   (j/query postgres-db
            ["SELECT s.filename, t.name FROM scene s

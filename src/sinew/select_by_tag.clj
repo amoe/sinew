@@ -8,4 +8,3 @@
   [& args]
   (doseq [result (map :filename (data/query-by-tag (first args)))]
     (println  result)))
-
