@@ -9,7 +9,8 @@
 
 (declare rename-all-files
          rename-file
-         update-name)
+         update-name
+         get-path)
 
 (defn -main
   [& args]
@@ -35,4 +36,15 @@
     (FileUtils/moveFile (File. old) (File. new))))
     
 
+(defn move-file [source target overwrite?]
+  (let [copy-options (if overwrite?
+                       [java.nio.file.StandardCopyOption/REPLACE_EXISTING]
+                       [])]
+    (java.nio.file.Files/move
+     (get-path source) (get-path target)
+     (into-array java.nio.file.CopyOption copy-options))))
 
+; Required to make the array call, otherwise clj attempts to call the wrong
+; method.
+(defn get-path [spec]
+  (java.nio.file.Paths/get spec (into-array String [])))

@@ -14,7 +14,8 @@
 (def prefix "/mnt/mydrive/videos")
 
 (def cli-options
-  [["-f" "--force" "Force addition even if scene not found"]
+  [["-F" "--force-scene" "Force addition even if scene not found"]
+   ["-f" "--force" "Overwrite existing destination files"]
    ["-d" "--description DESC" "Provide description" :default ""]])
 
 (defn -main
@@ -27,7 +28,8 @@
                         plaintext-name
                         (:description scene-info)
                         (:tags scene-info)
-                        scene-type))
+                        scene-type
+                        (:force opts)))
       :else
       (throw (Exception. (str "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE"))))))
 
@@ -41,13 +43,13 @@
             tags (sinew.scan-page/extract-tags page)]
         {:description description :tags tags}))
     (catch clojure.lang.ExceptionInfo e
-      (if (:force (:options opts))
+      (if (:force-scene (:options opts))
         {:description (:description (:options opts)) :tags []}
         (throw e)))))
 
 
 (defn insert-scene
-  [filename plaintext-name description tags scene-type]
+  [filename plaintext-name description tags scene-type force?]
   (prn description)
   (prn tags)
 
@@ -59,7 +61,7 @@
                         plaintext-name
                         "."
                         extension)]
-      (sinew.file-renamer/rename-file filename new-name)
+      (sinew.file-renamer/move-file filename new-name force?)
       (let [scene-id (data/insert-scene nil
                                          plaintext-name
                                          (str plaintext-name "." extension)
