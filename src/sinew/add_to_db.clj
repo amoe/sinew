@@ -53,6 +53,8 @@
   (prn description)
   (prn tags)
 
+  (println (str "Will force: " force?))
+
   (let [extension (sinew.file-renamer/get-extension filename)]
     (let [new-name (str prefix
                         "/"
