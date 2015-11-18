@@ -20,16 +20,17 @@
 
 (defn -main
   [& args]
-  (let [opts (cli/parse-opts args cli-options)]
-    (match (:arguments opts)
+  (let [parsed (cli/parse-opts args cli-options)]
+    (match (:arguments parsed)
       [filename plaintext-name scene-type]
-      (let [scene-info (retrieve-scene-info plaintext-name scene-type opts)]
+      (let [scene-info (retrieve-scene-info plaintext-name scene-type
+                                            (:options parsed))]
           (insert-scene filename
                         plaintext-name
                         (:description scene-info)
                         (:tags scene-info)
                         scene-type
-                        (:force opts)))
+                        (:force (:options opts))))
       :else
       (throw (Exception. (str "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE"))))))
 
@@ -43,8 +44,8 @@
             tags (sinew.scan-page/extract-tags page)]
         {:description description :tags tags}))
     (catch clojure.lang.ExceptionInfo e
-      (if (:force-scene (:options opts))
-        {:description (:description (:options opts)) :tags []}
+      (if (:force-scene opts))
+        {:description (:description opts)) :tags []}
         (throw e)))))
 
 
