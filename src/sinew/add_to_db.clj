@@ -44,8 +44,8 @@
             tags (sinew.scan-page/extract-tags page)]
         {:description description :tags tags}))
     (catch clojure.lang.ExceptionInfo e
-      (if (:force-scene opts))
-        {:description (:description opts)) :tags []}
+      (if (:force-scene opts)
+        {:description (:description opts) :tags []}
         (throw e)))))
 
 
