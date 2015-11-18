@@ -64,6 +64,7 @@
                         plaintext-name
                         "."
                         extension)]
+      (println (str "Moving to file: " new-name))
       (sinew.file-renamer/move-file filename new-name force?)
       (let [scene-id (data/insert-scene nil
                                          plaintext-name
