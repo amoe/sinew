@@ -30,7 +30,7 @@
                         (:description scene-info)
                         (:tags scene-info)
                         scene-type
-                        (:force (:options opts))))
+                        (:force (:options parsed))))
       :else
       (throw (Exception. (str "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE"))))))
 
