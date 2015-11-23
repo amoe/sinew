@@ -15,7 +15,10 @@
                 "/mnt/mydrive/videos/" (:scene_type scene) "/"
                 (:filename scene)))]
     (if (zero? x)
-      (throw (Exception. (str "unable to get mtime for file: " (:filename scene)))))
+      (throw 
+       (Exception. 
+        (str "file has 1970 mtime, or could not be read: "
+             (:filename scene)))))
     x))
 
 
