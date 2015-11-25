@@ -7,7 +7,8 @@
 (def prefixes
   {:a1 "b1"
    :a2 "b2"
-   :a3 "b3"})
+   :a3 "b3"
+   :a4 "b4"})
 
 (defn get-page [type model]
   (let [resolve-url (type prefixes)]
