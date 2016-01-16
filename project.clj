@@ -1,5 +1,5 @@
 (defproject sinew "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+  :description "Cataloguer of videos"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
@@ -22,8 +22,10 @@
 
   :plugins [[ragtime/ragtime.lein "0.3.8"]
             [lein-ring "0.9.1"]]
+
   :ragtime {:migrations ragtime.sql.files/migrations
-            :database "jdbc:postgresql://vlinder/amoe?user=amoe"}
+            :database "jdbc:postgresql://kupukupu/amoe?user=amoe"}
+
   :ring {:handler sinew.server/app}
   :main sinew.add-to-db
   :target-path "target/%s"

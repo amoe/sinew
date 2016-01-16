@@ -3,9 +3,9 @@
             [clj-time.coerce :as c]))
 
 (def postgres-db {:subprotocol "postgresql"
-                  :subname "//vlinder/amoe"
-                  :user "amoe"
-                  :password "clojure_test"})
+                  :subname "//kupukupu/sinew"
+                  :user "sinew"
+                  :password "bh25VnRDuivzOiIl"})
 
 (declare insert-tag)
 
