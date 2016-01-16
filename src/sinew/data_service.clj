@@ -3,7 +3,7 @@
             [clj-time.coerce :as c]))
 
 (def postgres-db {:subprotocol "postgresql"
-                  :subname "//kupukupu/sinew"
+                  :subname "//localhost/sinew"
                   :user "sinew"
                   :password "bh25VnRDuivzOiIl"})
 
