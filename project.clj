@@ -3,7 +3,7 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.6.0"]
+  :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/java.jdbc "0.3.6"]
                  ; This postgres driver is not the current version but the
                  ; version recommended by java.jdbc upstream.
@@ -14,7 +14,7 @@
                  [commons-io "2.4"]
                  [ring/ring-core "1.3.2"]
                  [ring/ring-jetty-adapter "1.3.2"]
-                 [compojure "1.3.1"]
+                 [compojure "1.5.0"]
                  [prone "0.8.0"]
                  [me.raynes/fs "1.4.6"]
                  [org.clojure/core.match "0.3.0-alpha4"]
