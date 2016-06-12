@@ -4,11 +4,9 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/java.jdbc "0.3.6"]
-                 ; This postgres driver is not the current version but the
-                 ; version recommended by java.jdbc upstream.
-                 [postgresql/postgresql "8.4-702.jdbc4"]
-                 [ragtime "0.3.8"]
+                 [org.clojure/java.jdbc "0.6.1"]
+                 [org.postgresql/postgresql "9.4.1208.jre7"]
+                 [ragtime "0.6.0"]
                  [clj-time "0.8.0"]
                  [enlive "1.1.5"]
                  [commons-io "2.4"]
@@ -20,11 +18,10 @@
                  [org.clojure/core.match "0.3.0-alpha4"]
                  [org.clojure/tools.cli "0.3.1"]]
 
-  :plugins [[ragtime/ragtime.lein "0.3.8"]
-            [lein-ring "0.9.1"]]
+  :plugins [[lein-ring "0.9.1"]]
 
-  :ragtime {:migrations ragtime.sql.files/migrations
-            :database "jdbc:postgresql://kupukupu/amoe?user=amoe"}
+  :aliases {"migrate"  ["run" "-m" "sinew.data-service/migrate"]
+            "rollback" ["run" "-m" "sinew.data-service/rollback"]}
 
   :ring {:handler sinew.server/app}
   :main sinew.add-to-db

@@ -1,11 +1,27 @@
 (ns sinew.data-service
   (:require [clojure.java.jdbc :as j]
-            [clj-time.coerce :as c]))
+            [clj-time.coerce :as c]
+            [ragtime.jdbc :as jdbc]
+            [ragtime.repl :as repl]))
 
 (def postgres-db {:subprotocol "postgresql"
                   :subname "//localhost/sinew"
                   :user "sinew"
                   :password "bh25VnRDuivzOiIl"})
+
+; Ragtime boilerplate for leiningen use
+
+(defn load-config []
+  {:datastore  (jdbc/sql-database postgres-db)
+   :migrations (jdbc/load-resources "migrations")})
+
+
+(defn migrate []
+  (repl/migrate (load-config)))
+
+(defn rollback []
+  (repl/rollback (load-config)))
+
 
 (declare insert-tag)
 
