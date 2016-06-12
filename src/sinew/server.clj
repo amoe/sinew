@@ -26,7 +26,7 @@
 
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
-  [:table :tbody :tr.file] (html/clone-for [file file-list]
+  [:table :tbody :tr.file_] (html/clone-for [file file-list]
                    [:td.name] (html/content (:filename file))
                    [:td.watched]
                    (html/html-content
@@ -41,7 +41,7 @@
 
 (html/deftemplate view-tags-template "templates/view-tags.html"
   [file-list]
-  [:table :tbody :tr.file] (html/clone-for [file file-list]
+  [:table :tbody :tr.file_] (html/clone-for [file file-list]
                    [:td.name] (html/content (:name file))
                    [:td.tags :ul :li.tag]
                    (html/clone-for [tag (:tags file)]
