@@ -1,34 +1,51 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
 
-<title>Conforming XHTML 1.1 Template</title>
-
-<style>
-  table {
-    border-collapse: collapse
-}
-td {
-    border: 1px solid #000
-}
-
-</style>
-
+<title>Conforming HTML5 Template</title>
+<!-- <script src="main.js"></script> -->
+<!-- <link href="main.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
 </head>
-
 <body>
-  <table>
-    <tr class="file">
-      <td class="name"></span>
-      <td class="watched"></span>
-      <td><a class="toggle-link" href="">Toggle watched state</a></td>
-      <td class="description"></td>
-      <td class="scene_type"></td>
-    </tr>
-  </table>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-1">
+      Sidebar
+    </div>
+    <div class="col-sm-11">
+      Main content
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Watched?</th>
+            <th>Toggle Link</th>
+            <th>Description</th>
+            <th>Scene Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="file">
+            <td class="name" scope="row"></span>
+            <td class="watched"></span>
+            <td><a class="toggle-link" href="">Toggle watched state</a></td>
+            <td class="description"></td>
+            <td class="scene_type"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
 </body>
-
 </html>
-
