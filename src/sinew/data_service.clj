@@ -35,7 +35,7 @@
 (defn list-all-scenes []
   (j/query postgres-db
            ["SELECT s.id, s.release_date, s.plaintext_name, s.filename,
-                    s.description, s.watched, s.scene_type
+                    s.description, s.watched, s.scene_type, s.rating
              FROM scene s"]))
              
              
@@ -45,7 +45,7 @@
   [tag]
   (j/query postgres-db
            ["SELECT s.filename, s.plaintext_name, s.watched, s.scene_type,
-                    s.description
+                    s.description, s.rating
              FROM scene s
              INNER JOIN scene_tags st ON st.scene_id = s.id
              INNER JOIN tag t ON st.tag_id  = t.id

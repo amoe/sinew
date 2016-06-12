@@ -36,6 +36,8 @@
                                                     (:plaintext_name file)))
                    [:td.description]
                    (html/html-content (:description file))
+                   [:td.rating]
+                   (html/html-content (:rating file))
                    [:td.scene_type]
                    (html/html-content (:scene_type file))))
 
