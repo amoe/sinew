@@ -22,7 +22,7 @@
 
 (defn get-mtime-strict [scene]
   (let [result (get-mtime-loose scene)]
-    (when (zero? x)
+    (when (zero? result)
       (throw 
        (Exception. 
         (str "file has 1970 mtime, or could not be read: " final-path))))))
