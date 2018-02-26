@@ -31,7 +31,7 @@
     (when (zero? (:mtime result))
       (throw 
        (Exception. 
-        (str "file has 1970 mtime, or could not be read: " (:final-path final-path)))))))
+        (str "file has 1970 mtime, or could not be read: " (:final-path result)))))))
 
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
