@@ -10,10 +10,13 @@
             [net.cgrand.enlive-html :as html]
             [me.raynes.fs :as fs]))
 
+(defn get-file-root []
+  (-> "/usr/local/etc/sinew.edn" slurp read-string :file-root))
+
 (defn get-mtime [scene]
   (let [x (fs/mod-time (str
-                "/mnt/mydrive/videos/" (:scene_type scene) "/"
-                (:filename scene)))]
+                        (get-file-root) (:scene_type scene) "/"
+                        (:filename scene)))]
     (if (zero? x)
       (throw 
        (Exception. 

@@ -1,20 +1,25 @@
 # sinew
 
-FIXME: description
+It's a pluggable movie tracker and metadata scanner/organizer..
 
 ## Installation
 
-Download from http://example.com/FIXME.
+You can take a look at `install.sh`.
 
 ## Usage
 
-FIXME: explanation
 
-    $ java -jar sinew-0.1.0-standalone.jar [args]
+    lein -m sinew.server/run
+
+The server starts on port 8000 by default.
 
 ## Options
 
-FIXME: listing of options this app accepts.
+You have to configure it before it will work.  It expects to find a file at
+`/usr/local/etc/sinew.edn`.  The file looks as such:
+
+    {:file-root "/mnt/kirk/genre/action"}
+
 
 ## Examples
 
