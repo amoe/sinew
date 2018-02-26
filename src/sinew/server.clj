@@ -16,15 +16,16 @@
 (defn get-final-path [scene]
   (str (get-file-root) "/" (:scene_type scene) "/" (:filename scene)))
 
-(defn get-mtime [scene]
-  (let [final-path (get-final-path scene)]
-    (let [x (fs/mod-time final-path)]
-      (when (zero? x)
-        (throw 
-         (Exception. 
-          (str "file has 1970 mtime, or could not be read: " final-path))))
-      x)))
 
+(defn get-mtime-loose [scene]
+  (-> scene get-final-path fs/mod-time))
+
+(defn get-mtime-strict [scene]
+  (let [result (get-mtime-loose scene)]
+    (when (zero? x)
+      (throw 
+       (Exception. 
+        (str "file has 1970 mtime, or could not be read: " final-path))))))
 
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
@@ -59,12 +60,14 @@
 (html/deftemplate main-template "templates/index.html" []
   [:head :title] (html/content "bar"))
 
+;; Not really sure what's going to happen when the file doesn't exist, but here
+;; goes nothing...
+(defn compare-scenes [x y]
+  (compare (get-mtime-loose x) (get-mtime-loose y)))
+
 (defn scenes-sorted-by-mtime []
-  (sort
-   (fn [x y] (compare (get-mtime x) (get-mtime y)))
-   (data/list-all-scenes)))
-
-
+  (sort compare-scenes
+        (data/list-all-scenes)))
 
 (defn render-index [tag-name]
   {:headers {"Content-Type" "text/html; charset=UTF-8"}
