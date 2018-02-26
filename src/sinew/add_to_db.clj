@@ -4,14 +4,13 @@
             [sinew.file-renamer]
             [sinew.data-service :as data]
             [clojure.core.match :refer [match]]
+            [sinew.configuration :as configuration]
             [clojure.tools.cli :as cli])
   (:gen-class :main true))
 
 (declare insert-scene
          insert-all-tags
          retrieve-scene-info)
-
-(def prefix "/mnt/mydrive/videos")
 
 (def cli-options
   [["-F" "--force-scene" "Force addition even if scene not found"]
@@ -57,7 +56,7 @@
   (println (str "Will force: " force?))
 
   (let [extension (sinew.file-renamer/get-extension filename)]
-    (let [new-name (str prefix
+    (let [new-name (str (get-file-root)
                         "/"
                         scene-type
                         "/"

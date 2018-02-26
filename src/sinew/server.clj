@@ -8,13 +8,11 @@
             [sinew.data-service :as data]
             [prone.middleware :as prone]
             [net.cgrand.enlive-html :as html]
+            [sinew.configuration :as configuration]
             [me.raynes.fs :as fs]))
 
-(defn get-file-root []
-  (-> "/usr/local/etc/sinew.edn" slurp read-string :file-root))
-
 (defn get-final-path [scene]
-  (str (get-file-root) "/" (:scene_type scene) "/" (:filename scene)))
+  (str (configuration/get-file-root) "/" (:scene_type scene) "/" (:filename scene)))
 
 
 (defn ^:private get-mtime-wrapper [scene]

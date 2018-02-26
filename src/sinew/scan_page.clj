@@ -1,17 +1,11 @@
 (ns sinew.scan-page
   (:require [net.cgrand.enlive-html :as html]
             [clojure.java.io :as io]
-            [clojure.string :as string]))
-
-
-(def prefixes
-  {:a1 "b1"
-   :a2 "b2"
-   :a3 "b3"
-   :a4 "b4"})
+            [clojure.string :as string]
+            [sinew.configuration :as configuration]))
 
 (defn get-page [type model]
-  (let [resolve-url (type prefixes)]
+  (let [resolve-url (get (configuration/get-prefixes) type)]
     (if-not resolve-url
       (throw (Exception. (str "unknown scene type: " type))))
     (try
