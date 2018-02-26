@@ -1,6 +1,9 @@
 # sinew
 
-It's a pluggable movie tracker and metadata scanner/organizer..
+It's a pluggable movie tracker and metadata scanner/organizer.  Sinew knows
+about the concept of a 'scene base' and a 'scene type' and will allow you to
+track these things.  For instance, you can then query: "all videos by
+TheRussianHacker, where the type is `youve-been-doing-it-wrong`".
 
 ## Installation
 

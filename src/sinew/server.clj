@@ -14,8 +14,7 @@
   (-> "/usr/local/etc/sinew.edn" slurp read-string :file-root))
 
 (defn get-final-path [scene]
-  (str (get-file-root) (:scene_type scene) "/"
-       (:filename scene)))
+  (str (get-file-root) "/" (:scene_type scene) "/" (:filename scene)))
 
 (defn get-mtime [scene]
   (let [final-path (get-final-path scene)]
