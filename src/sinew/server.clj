@@ -13,18 +13,18 @@
 (defn get-file-root []
   (-> "/usr/local/etc/sinew.edn" slurp read-string :file-root))
 
+(defn get-final-path [scene]
+  (str (get-file-root) (:scene_type scene) "/"
+       (:filename scene)))
+
 (defn get-mtime [scene]
-  (let [x (fs/mod-time (str
-                        (get-file-root) (:scene_type scene) "/"
-                        (:filename scene)))]
-    (if (zero? x)
-      (throw 
-       (Exception. 
-        (str "file has 1970 mtime, or could not be read: "
-             (:filename scene)))))
-    x))
-
-
+  (let [final-path (get-final-path scene)]
+    (let [x (fs/mod-time final-path)]
+      (when (zero? x)
+        (throw 
+         (Exception. 
+          (str "file has 1970 mtime, or could not be read: " final-path))))
+      x)))
 
 
 (html/deftemplate search-result-template "templates/search-result.html"
