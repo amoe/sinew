@@ -4,4 +4,4 @@
   (-> "/usr/local/etc/sinew.edn" slurp read-string :file-root))
 
 (defn get-prefixes []
-  (-> "/usr/local/etc/sinew.edn" slurp read-string :prefixes)
+  (-> "/usr/local/etc/sinew.edn" slurp read-string :prefixes))
