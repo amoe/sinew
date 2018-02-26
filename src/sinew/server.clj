@@ -17,15 +17,21 @@
   (str (get-file-root) "/" (:scene_type scene) "/" (:filename scene)))
 
 
+(defn ^:private get-mtime-wrapper [scene]
+  (let [final-path (get-final-path scene)]
+    (let [result (fs/mod-time final-path)]
+      {:final-path final-path
+       :mtime result})))
+
 (defn get-mtime-loose [scene]
-  (-> scene get-final-path fs/mod-time))
+  (-> scene get-mtime-wrapper :mtime))
 
 (defn get-mtime-strict [scene]
-  (let [result (get-mtime-loose scene)]
-    (when (zero? result)
+  (let [result (get-mtime-wrapper scene)]
+    (when (zero? (:mtime result))
       (throw 
        (Exception. 
-        (str "file has 1970 mtime, or could not be read: " final-path))))))
+        (str "file has 1970 mtime, or could not be read: " (:final-path final-path)))))))
 
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
