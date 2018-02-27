@@ -35,7 +35,13 @@ You have to configure it before it will work.  It expects to find a file at
      :db-spec {:subprotocol "postgresql"
                :subname "//localhost/sinew"
                :user "sinew"
-               :password "xyzzy"}}
+               :password "xyzzy"}
+    :prefixes
+     {:type1 "http://www.site1.com/episode/"
+      :type2 "http://www.site2.org/episode/"}}
+
+Prefixes defines where to look for video descriptions.
+
 
 ## Examples
 
