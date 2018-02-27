@@ -11,7 +11,7 @@ You can take a look at `install.sh`.
 
 ## Usage
 
-    lein -m sinew.server/run
+    lein run -m sinew.server/run
 
 The server starts on port 8000 by default.
 
