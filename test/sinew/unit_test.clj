@@ -1,4 +1,4 @@
-(ns unit.scan-filenames-test
+(ns sinew.unit-test
   (:require [clojure.test :refer :all]
             [sinew.scan-filenames :as sut]))
 
