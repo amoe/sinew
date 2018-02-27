@@ -107,6 +107,7 @@
              (Boolean/valueOf (get params "watched"))))
        (GET "/toggle-watched/:name" [name]
             (toggle-watched name))
+       (route/resources "/")
        (route/not-found "<h1>Page not found</h1>"))
       prone/wrap-exceptions
       wp/wrap-params))
