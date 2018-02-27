@@ -11,7 +11,6 @@ You can take a look at `install.sh`.
 
 ## Usage
 
-
     lein -m sinew.server/run
 
 The server starts on port 8000 by default.
@@ -38,7 +37,6 @@ You have to configure it before it will work.  It expects to find a file at
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2018 David Banks
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+License is AGPLv3.
