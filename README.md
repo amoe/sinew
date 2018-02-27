@@ -7,11 +7,22 @@ TheRussianHacker, where the type is `youve-been-doing-it-wrong`".
 
 ## Installation
 
-You can take a look at `install.sh`.
+You can take a look at `install.sh`.  PostgreSQL 9.4 is required to store
+the database.  Last tested with Leiningen 2.8.1
 
 ## Usage
 
+Before you can run the server, you'll have to apply the database schema.  You
+can do that by running:
+
+    lein migrate
+
+After this, to start the server, do the following:
+
     lein run -m sinew.server/run
+
+Or the venerable `lein ring server-headless`, if you want to watch for
+server reloads.
 
 The server starts on port 8000 by default.
 
