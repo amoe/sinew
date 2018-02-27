@@ -22,7 +22,7 @@ After this, to start the server, do the following:
     lein run -m sinew.server/run
 
 Or the venerable `lein ring server-headless`, if you want to watch for
-server reloads.
+server reloads.  In this case the server will start on port 3000.
 
 The server starts on port 8000 by default.
 

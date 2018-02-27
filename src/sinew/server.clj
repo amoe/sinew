@@ -62,7 +62,7 @@
 
 
 (html/deftemplate main-template "templates/index.html" []
-  [:head :title] (html/content "bar"))
+  [:head :title] (html/content "Sinew | usage page"))
 
 ;; Not really sure what's going to happen when the file doesn't exist, but here
 ;; goes nothing...
