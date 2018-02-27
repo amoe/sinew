@@ -31,8 +31,11 @@ The server starts on port 8000 by default.
 You have to configure it before it will work.  It expects to find a file at
 `/usr/local/etc/sinew.edn`.  The file looks as such:
 
-    {:file-root "/mnt/kirk/genre/action"}
-
+    {:file-root "/mnt/kirk/genre/action"
+     :db-spec {:subprotocol "postgresql"
+               :subname "//localhost/sinew"
+               :user "sinew"
+               :password "xyzzy"}}
 
 ## Examples
 

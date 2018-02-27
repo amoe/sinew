@@ -1,29 +1,11 @@
 (ns sinew.data-service
   (:require [clojure.java.jdbc :as j]
             [clj-time.coerce :as c]
-            [ragtime.jdbc :as jdbc]
-            [ragtime.repl :as repl]))
+            [sinew.configuration :as configuration]))
 
-(def postgres-db {:subprotocol "postgresql"
-                  :subname "//localhost/sinew"
-                  :user "sinew"
-                  :password "bh25VnRDuivzOiIl"})
+(defn insert-tag [name]
+  (:id (first (j/insert! postgres-db :tag {:name name}))))
 
-; Ragtime boilerplate for leiningen use
-
-(defn load-config []
-  {:datastore  (jdbc/sql-database postgres-db)
-   :migrations (jdbc/load-resources "migrations")})
-
-
-(defn migrate []
-  (repl/migrate (load-config)))
-
-(defn rollback []
-  (repl/rollback (load-config)))
-
-
-(declare insert-tag)
 
 (defn update-name [plaintext-name new-name]
   (j/update! postgres-db
@@ -65,8 +47,6 @@
       (:id (first result)))))
 
 
-(defn insert-tag [name]
-  (:id (first (j/insert! postgres-db :tag {:name name}))))
 
 (defn make-sql-date [year month day]
   (java.sql.Date.

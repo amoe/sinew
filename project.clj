@@ -20,8 +20,8 @@
 
   :plugins [[lein-ring "0.9.1"]]
 
-  :aliases {"migrate"  ["run" "-m" "sinew.data-service/migrate"]
-            "rollback" ["run" "-m" "sinew.data-service/rollback"]}
+  :aliases {"migrate"  ["run" "-m" "sinew.db-setup/migrate"]
+            "rollback" ["run" "-m" "sinew.db-setup/rollback"]}
 
   :ring {:handler sinew.server/app}
   :main sinew.add-to-db
