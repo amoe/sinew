@@ -89,8 +89,6 @@
   (data/toggle-watched plaintext-name)
   (str "Toggled watched status for " plaintext-name))
 
-
-
 (defn pick-next-scene [watched?]
    (:plaintext_name
     (first
