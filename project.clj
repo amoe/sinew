@@ -9,6 +9,8 @@
                  [ragtime "0.6.0"]
                  [clj-time "0.8.0"]
                  [enlive "1.1.5"]
+                 [org.clojure/tools.logging "0.4.0"]
+                 [ch.qos.logback/logback-classic "1.1.3"]
                  [commons-io "2.4"]
                  [ring/ring-core "1.3.2"]
                  [ring/ring-jetty-adapter "1.3.2"]

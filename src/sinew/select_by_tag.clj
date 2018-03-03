@@ -6,5 +6,6 @@
 
 (defn -main
   [& args]
-  (doseq [result (map :filename (data/query-by-tag (first args)))]
+  ; FIXME nil should be an instance of repository
+  (doseq [result (map :filename (data/query-by-tag nil (first args)))]
     (println  result)))

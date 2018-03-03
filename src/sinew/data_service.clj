@@ -23,7 +23,6 @@
   (get-scenes-with-tags [this]))
 
 
-
 ;; If any method here doesn't refer to postgres-db, then it's wrong and should
 ;; be factored out.
 (defrecord PostgresqlRepository [postgres-db]
@@ -98,6 +97,5 @@
                  {}
                  (get-tag-data-from-db this)))))
 
-
-
-
+(defn new-postgresql-repository [db-spec]
+  (->PostgresqlRepository db-spec))

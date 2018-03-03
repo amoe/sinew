@@ -2,6 +2,7 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.middleware.params :as wp]
             [clojure.pprint :as pprint]
+            [clojure.tools.logging :refer [debugf]]
             [compojure.core :refer :all]
             [compojure.route :as route]
             [sinew.select-by-tag :as select-by-tag]
@@ -69,24 +70,25 @@
 (defn compare-scenes [x y]
   (compare (get-mtime-loose x) (get-mtime-loose y)))
 
-(defn scenes-sorted-by-mtime []
+(defn scenes-sorted-by-mtime [scene-data]
   (sort compare-scenes
-        (data/list-all-scenes)))
+        scene-data))
 
-(defn render-index [tag-name]
+(defn render-index [repository tag-name]
   {:headers {"Content-Type" "text/html; charset=UTF-8"}
-   :body (search-result-template (data/query-by-tag tag-name))})
+   :body (search-result-template (data/query-by-tag repository tag-name))})
 
-(defn render-list-all []
-  {:headers {"Content-Type" "text/html; charset=UTF-8"}
-   :body (search-result-template (scenes-sorted-by-mtime))})
+(defn render-list-all [repository]
+  (let [all-scenes (data/list-all-scenes repository)]
+    {:headers {"Content-Type" "text/html; charset=UTF-8"}
+     :body (search-result-template (scenes-sorted-by-mtime all-scenes))}))
 
-(defn render-view-tags []
+(defn render-view-tags [repository]
   {:headers {"Content-Type" "text/html; charset=UTF-8"}
-   :body (view-tags-template (data/get-scenes-with-tags))})
+   :body (view-tags-template (data/get-scenes-with-tags repository))})
   
-(defn toggle-watched [plaintext-name]
-  (data/toggle-watched plaintext-name)
+(defn toggle-watched [repository plaintext-name]
+  (data/toggle-watched repository plaintext-name)
   (str "Toggled watched status for " plaintext-name))
 
 (defn pick-next-scene [watched?]
@@ -94,23 +96,31 @@
     (first
      (filter (fn [x] (= (:watched x) watched?)) (scenes-sorted-by-mtime)))))
 
-(def app
+;; returns a function which is the handler
+(defn make-app [{repository :repository}]
   (-> (routes
        (GET "/" [] (main-template))
-       (GET "/list" [] (render-list-all))
-       (GET "/view-tags" [] (render-view-tags))
-       (GET "/tag/:tag-name" [tag-name] (render-index tag-name))
+       (GET "/list" [] (render-list-all repository))
+       (GET "/view-tags" [] (render-view-tags repository))
+       (GET "/tag/:tag-name" [tag-name] (render-index repository tag-name))
        (GET "/next-scene" {params :params}
             (pick-next-scene
              (Boolean/valueOf (get params "watched"))))
        (GET "/toggle-watched/:name" [name]
-            (toggle-watched name))
+            (toggle-watched repository name))
        (route/resources "/")
        (route/not-found "<h1>Page not found</h1>"))
       prone/wrap-exceptions
       wp/wrap-params))
 
 
+(defn build-options []
+  (let [configuration (configuration/new-file-configuration)]
+    {:repository (data/new-postgresql-repository (configuration/get-db-spec configuration))
+     :configuration configuration}))
+
 (defn run []
-  (jetty/run-jetty #'app {:port 8000 :join? false}))
+  (let [options (build-options)]
+    (jetty/run-jetty (make-app options)
+                     {:port 8000 :join? false})))
             
