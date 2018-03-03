@@ -2,6 +2,7 @@
   (:require [clojure.pprint :as pprint]
             [sinew.scan-page]
             [clojure.tools.logging :refer [fatalf]]
+            [sinew.filesystem-tools :as filesystem-tools]
             [sinew.file-renamer]
             [sinew.system :as system]
             [sinew.data-service :as data]
@@ -26,7 +27,8 @@
       [filename plaintext-name scene-type]
       (let [scene-info (retrieve-scene-info plaintext-name scene-type
                                             (:options parsed))]
-          (insert-scene filename
+          (insert-scene (system/build-options)
+                        filename
                         plaintext-name
                         (:description scene-info)
                         (:tags scene-info)
@@ -45,12 +47,16 @@
                                          plaintext-name)]
       (let [description (sinew.scan-page/extract-description page)
             tags (sinew.scan-page/extract-tags page)]
+        (when (empty? description)
+          (throw (ex-info "Empty description, perhaps the scan has failed"
+                          {:cause :null-description-after-scan})))
+
+
         {:description description :tags tags}))
     (catch clojure.lang.ExceptionInfo e
       (if (:force-scene opts)
         {:description (:description opts) :tags []}
         (throw e)))))
-
 
 (defn insert-scene
   [{configuration :configuration
@@ -68,6 +74,8 @@
                         plaintext-name
                         "."
                         extension)]
+
+      (filesystem-tools/mkdir-parents! new-name)
       (println (str "Moving to file: " new-name))
       (sinew.file-renamer/move-file filename new-name force?)
       (let [scene-id (data/insert-scene repository
@@ -76,7 +84,7 @@
                                          (str plaintext-name "." extension)
                                          description
                                          scene-type)]
-        (insert-all-tags scene-id tags)))))
+        (insert-all-tags repository scene-id tags)))))
     
 (defn insert-all-tags
   [repository scene-id tags]

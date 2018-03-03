@@ -49,7 +49,6 @@ You have to configure it before it will work.  It expects to find a file at
 
 Prefixes defines where to look for video descriptions.
 
-
 ## Examples
 
 ...
