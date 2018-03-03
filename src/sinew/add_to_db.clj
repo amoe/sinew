@@ -1,6 +1,6 @@
 (ns sinew.add-to-db
   (:require [clojure.pprint :as pprint]
-            [sinew.scan-page]
+            [sinew.scan-page :as scan-page]
             [clojure.tools.logging :refer [fatalf]]
             [sinew.filesystem-tools :as filesystem-tools]
             [sinew.file-renamer]
@@ -43,10 +43,10 @@
   [plaintext-name scene-type opts]
   (prn opts)
   (try
-    (let [page (sinew.scan-page/get-page (keyword scene-type)
+    (let [page (scan-page/get-page (keyword scene-type)
                                          plaintext-name)]
-      (let [description (sinew.scan-page/extract-description page)
-            tags (sinew.scan-page/extract-tags page)]
+      (let [description (scan-page/extract-description page)
+            tags (scan-page/extract-tags page)]
         (when (empty? description)
           (throw (ex-info "Empty description, perhaps the scan has failed"
                           {:cause :null-description-after-scan})))

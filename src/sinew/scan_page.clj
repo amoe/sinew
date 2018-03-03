@@ -1,29 +1,39 @@
 (ns sinew.scan-page
   (:require [net.cgrand.enlive-html :as html]
             [clojure.java.io :as io]
+            [clj-http.client :as client]
             [clojure.string :as string]
+            [sinew.utility :as utility]
             [sinew.configuration :as configuration]))
+
+(defn get-html-resource-input [resolve-url model]
+  (-> (str resolve-url model)
+      (client/get)
+      :body
+      utility/string->stream))
 
 (defn get-page [type model]
   (let [resolve-url (get (configuration/get-prefixes) type)]
     (if-not resolve-url
       (throw (Exception. (str "unknown scene type: " type))))
     (try
-      (html/html-resource
-       (java.net.URL. (str resolve-url model)))
+      (html/html-resource (get-html-resource-input resolve-url model))
       (catch java.io.FileNotFoundException e
         (throw (ex-info "Scene not found" {:type :scene-not-found}))))))
-  
-(defn convert-page [path]
-  (html/html-resource (io/input-stream path)))
 
-(defn clean-description [desc]
+(defn cleanup-description [desc]
   (string/trim (apply str (filter #(not (= % \newline)) desc))))
 
-(defn extract-description [resource]
-  (clean-description
-   (html/text (first (html/select resource
-               #{[:p.story]})))))
+(defn get-description [page]
+  (-> page extract-description cleanup-description))
+  
+
+;; The enlive selector should actually be pulled in based on the prefix.
+(defn extract-description [page]
+  (-> page
+      (html/select [:span.latest_update_description])
+      first
+      html/text))
 
 (defn extract-tags [resource]
   (distinct
