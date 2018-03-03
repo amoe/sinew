@@ -2,6 +2,7 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.middleware.params :as wp]
             [clojure.pprint :as pprint]
+            [sinew.system :as system]
             [clojure.tools.logging :refer [debugf]]
             [compojure.core :refer :all]
             [compojure.route :as route]
@@ -114,13 +115,10 @@
       wp/wrap-params))
 
 
-(defn build-options []
-  (let [configuration (configuration/new-file-configuration)]
-    {:repository (data/new-postgresql-repository (configuration/get-db-spec configuration))
-     :configuration configuration}))
+
 
 (defn run []
-  (let [options (build-options)]
+  (let [options (system/build-options)]
     (jetty/run-jetty (make-app options)
                      {:port 8000 :join? false})))
             

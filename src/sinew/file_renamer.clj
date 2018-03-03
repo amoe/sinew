@@ -16,14 +16,15 @@
   [& args]
   (rename-all-files (first args) (second args)))
 
-(defn rename-all-files [data-path prefix]
+(defn rename-all-files [repository data-path prefix]
   (let [data (read-string (slurp data-path))]
     (doseq [datum data]
       (let [extension (FilenameUtils/getExtension (:filename datum))]
         (let [new-name (str prefix "/" (:name datum) "." extension)]
           (rename-file (:filename datum) new-name)
-          (data/update-name
-           (:name datum) (str (:name datum) "." extension)))))))
+          (data/update-name repository
+                            (:name datum)
+                            (str (:name datum) "." extension)))))))
 
 (defn get-extension
   [path]

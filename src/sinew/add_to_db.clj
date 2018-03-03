@@ -1,7 +1,9 @@
 (ns sinew.add-to-db
   (:require [clojure.pprint :as pprint]
             [sinew.scan-page]
+            [clojure.tools.logging :refer [fatalf]]
             [sinew.file-renamer]
+            [sinew.system :as system]
             [sinew.data-service :as data]
             [clojure.core.match :refer [match]]
             [sinew.configuration :as configuration]
@@ -31,7 +33,9 @@
                         scene-type
                         (:force (:options parsed))))
       :else
-      (throw (Exception. (str "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE"))))))
+      (do 
+        (fatalf "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE")
+        (System/exit 1)))))
 
 (defn retrieve-scene-info
   [plaintext-name scene-type opts]
@@ -49,14 +53,15 @@
 
 
 (defn insert-scene
-  [filename plaintext-name description tags scene-type force?]
+  [{configuration :configuration
+    repository :repository} filename plaintext-name description tags scene-type force?]
   (prn description)
   (prn tags)
 
   (println (str "Will force: " force?))
 
   (let [extension (sinew.file-renamer/get-extension filename)]
-    (let [new-name (str (get-file-root)
+    (let [new-name (str (configuration/get-file-root configuration)
                         "/"
                         scene-type
                         "/"
@@ -65,7 +70,8 @@
                         extension)]
       (println (str "Moving to file: " new-name))
       (sinew.file-renamer/move-file filename new-name force?)
-      (let [scene-id (data/insert-scene nil
+      (let [scene-id (data/insert-scene repository
+                                        nil   ; ???
                                          plaintext-name
                                          (str plaintext-name "." extension)
                                          description
@@ -73,9 +79,10 @@
         (insert-all-tags scene-id tags)))))
     
 (defn insert-all-tags
-  [scene-id tags]
+  [repository scene-id tags]
   (doseq [tag tags]
-    (data/insert-scene-tag scene-id
-                           (data/insert-or-return-tag tag))))
+    (data/insert-scene-tag repository
+                           scene-id
+                           (data/insert-or-return-tag repository tag))))
                              
 
