@@ -5,6 +5,9 @@ about the concept of a 'scene base' and a 'scene type' and will allow you to
 track these things.  For instance, you can then query: "all videos by
 TheRussianHacker, where the type is `youve-been-doing-it-wrong`".
 
+It also tracks the watched-status of each video -- manually toggled, not like
+things like Plex, and allows you to store star-ratings.
+
 ## Installation
 
 You can take a look at `install.sh`.  PostgreSQL 9.4 is required to store
@@ -48,7 +51,6 @@ You have to configure it before it will work.  It expects to find a file at
               :selectors {:description [:div.desc]
                           :tags [:div.tags a]}}}}
 
-
 Prefixes defines where to look for video descriptions.
 
 One example is given of the site here.  At the moment the code assumes that each
@@ -59,6 +61,8 @@ calling `add-to-db`.  Then the description is looked up with the Enlive selector
 (which is `[:div.desc]` in this example).  The text-content of that element
 forms the description that's stored in Sinew's database.  The same goes for the
 tags, except that the selector for this case may return multiple elements.
+
+Not every video may have tags, and that's pretty fine.
 
 ## License
 
