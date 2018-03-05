@@ -24,16 +24,19 @@
 (defn cleanup-description [desc]
   (string/trim (apply str (filter #(not (= % \newline)) desc))))
 
-(defn get-description [page]
-  (-> page extract-description cleanup-description))
-  
-
-;; The enlive selector should actually be pulled in based on the prefix.
+;; The appropriate enlive selector should actually be pulled in from the config
+;; file based on the prefix.
 (defn extract-description [page]
   (-> page
       (html/select [:span.latest_update_description])
       first
       html/text))
+
+(defn get-description [page]
+  (-> page extract-description cleanup-description))
+  
+
+
 
 (defn extract-tags [resource]
   (distinct
