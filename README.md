@@ -60,19 +60,6 @@ calling `add-to-db`.  Then the description is looked up with the Enlive selector
 forms the description that's stored in Sinew's database.  The same goes for the
 tags, except that the selector for this case may return multiple elements.
 
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
 ## License
 
 Copyright © 2018 David Banks
