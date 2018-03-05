@@ -12,8 +12,8 @@
       :body
       utility/string->stream))
 
-(defn get-page [type model]
-  (let [resolve-url (get (configuration/get-prefixes) type)]
+(defn get-page [prefixes type model]
+  (let [resolve-url (get prefixes type)]
     (if-not resolve-url
       (throw (Exception. (str "unknown scene type: " type))))
     (try
@@ -26,17 +26,16 @@
 
 ;; The appropriate enlive selector should actually be pulled in from the config
 ;; file based on the prefix.
-(defn extract-description [page]
+(defn extract-description [page description-selector]
   (-> page
-      (html/select [:span.latest_update_description])
+      (html/select description-selector)
       first
       html/text))
 
-(defn get-description [page]
-  (-> page extract-description cleanup-description))
-  
-
-
+(defn get-description [page description-selector]
+  (-> page
+      (extract-description description-selector)
+      cleanup-description))
 
 (defn extract-tags [resource]
   (distinct

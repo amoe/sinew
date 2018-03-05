@@ -2,6 +2,7 @@
   (:require [clojure.pprint :as pprint]
             [sinew.scan-page :as scan-page]
             [clojure.tools.logging :refer [fatalf]]
+            [taoensso.truss :refer :all]
             [sinew.filesystem-tools :as filesystem-tools]
             [sinew.file-renamer]
             [sinew.system :as system]
@@ -22,12 +23,15 @@
 
 (defn -main
   [& args]
-  (let [parsed (cli/parse-opts args cli-options)]
+  (let [system (system/build-system)
+        parsed (cli/parse-opts args cli-options)]
     (match (:arguments parsed)
       [filename plaintext-name scene-type]
-      (let [scene-info (retrieve-scene-info plaintext-name scene-type
+      (let [scene-info (retrieve-scene-info (configuration/get-prefixes (:configuration system))
+                                            plaintext-name
+                                            scene-type
                                             (:options parsed))]
-          (insert-scene (system/build-options)
+          (insert-scene system
                         filename
                         plaintext-name
                         (:description scene-info)
@@ -39,13 +43,20 @@
         (fatalf "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE")
         (System/exit 1)))))
 
+(defn get-description-selector [prefixes scene-type]
+  (have! keyword? scene-type)
+  (-> prefixes (get scene-type) :selectors :description))
+ 
 (defn retrieve-scene-info
-  [plaintext-name scene-type opts]
+  [prefixes plaintext-name scene-type opts]
+  (have! keyword? scene-type)
   (prn opts)
   (try
-    (let [page (scan-page/get-page (keyword scene-type)
-                                         plaintext-name)]
-      (let [description (scan-page/extract-description page)
+    (let [page (scan-page/get-page prefixes
+                                   (keyword scene-type)
+                                   plaintext-name)]
+      (let [description (scan-page/extract-description page
+                                                       (get-description-selector prefixes scene-type))
             tags (scan-page/extract-tags page)]
         (when (empty? description)
           (throw (ex-info "Empty description, perhaps the scan has failed"

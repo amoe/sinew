@@ -13,8 +13,8 @@
             [sinew.configuration :as configuration]
             [me.raynes.fs :as fs]))
 
-(defn get-final-path [scene]
-  (str (configuration/get-file-root) "/" (:scene_type scene) "/" (:filename scene)))
+(defn get-final-path [configuration scene]
+  (str (configuration/get-file-root configuration) "/" (:scene_type scene) "/" (:filename scene)))
 
 
 (defn ^:private get-mtime-wrapper [scene]
@@ -118,7 +118,7 @@
 
 
 (defn run []
-  (let [options (system/build-options)]
-    (jetty/run-jetty (make-app options)
+  (let [system (system/build-system)]
+    (jetty/run-jetty (make-app system)
                      {:port 8000 :join? false})))
             
