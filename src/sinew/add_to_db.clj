@@ -29,7 +29,7 @@
       [filename plaintext-name scene-type]
       (let [scene-info (retrieve-scene-info (configuration/get-prefixes (:configuration system))
                                             plaintext-name
-                                            scene-type
+                                            (keyword scene-type)
                                             (:options parsed))]
           (insert-scene system
                         filename
@@ -46,6 +46,10 @@
 (defn get-description-selector [prefixes scene-type]
   (have! keyword? scene-type)
   (-> prefixes (get scene-type) :selectors :description))
+
+(defn get-tags-selector [prefixes scene-type]
+  (have! keyword? scene-type)
+  (-> prefixes (get scene-type) :selectors :tags))
  
 (defn retrieve-scene-info
   [prefixes plaintext-name scene-type opts]
@@ -57,11 +61,10 @@
                                    plaintext-name)]
       (let [description (scan-page/extract-description page
                                                        (get-description-selector prefixes scene-type))
-            tags (scan-page/extract-tags page)]
+            tags (scan-page/extract-tags page (get-tags-selector prefixes scene-type))]
         (when (empty? description)
           (throw (ex-info "Empty description, perhaps the scan has failed"
                           {:cause :null-description-after-scan})))
-
 
         {:description description :tags tags}))
     (catch clojure.lang.ExceptionInfo e

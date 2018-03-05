@@ -13,7 +13,7 @@
       utility/string->stream))
 
 (defn get-page [prefixes type model]
-  (let [resolve-url (get prefixes type)]
+  (let [resolve-url (get-in prefixes [type :url])]
     (if-not resolve-url
       (throw (Exception. (str "unknown scene type: " type))))
     (try
@@ -37,8 +37,8 @@
       (extract-description description-selector)
       cleanup-description))
 
-(defn extract-tags [resource]
+(defn extract-tags [resource tag-selector]
   (distinct
-   (map html/text (html/select resource #{[:div.updatetags :a]}))))
+   (map html/text (html/select resource #{tag-selector}))))
 
   

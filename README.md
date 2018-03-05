@@ -44,10 +44,22 @@ You have to configure it before it will work.  It expects to find a file at
                :user "sinew"
                :password "xyzzy"}
     :prefixes
-     {:type1 "http://www.site1.com/episode/"
-      :type2 "http://www.site2.org/episode/"}}
+     {:type1 {:url "http://www.site1.com/episode/"
+              :selectors {:description [:div.desc]
+                          :tags [:div.tags a]}}}}
+
 
 Prefixes defines where to look for video descriptions.
+
+One example is given of the site here.  At the moment the code assumes that each
+video has a 'plaintext name', which is basically the machine-readable id for
+that video, and that this id can simply be appended to the `:url` to get the
+metadata page for the video.  That plaintext name is given by the user when
+calling `add-to-db`.  Then the description is looked up with the Enlive selector
+(which is `[:div.desc]` in this example).  The text-content of that element
+forms the description that's stored in Sinew's database.  The same goes for the
+tags, except that the selector for this case may return multiple elements.
+
 
 ## Examples
 
