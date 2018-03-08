@@ -13,18 +13,18 @@
             [sinew.configuration :as configuration]
             [me.raynes.fs :as fs]))
 
-(defn get-final-path [configuration scene]
-  (str (configuration/get-file-root configuration) "/" (:scene_type scene) "/" (:filename scene)))
+(defn get-final-path [file-root scene]
+  (str file-root "/" (:scene_type scene) "/" (:filename scene)))
 
 
-(defn ^:private get-mtime-wrapper [scene]
-  (let [final-path (get-final-path scene)]
+(defn ^:private get-mtime-wrapper [scene file-root]
+  (let [final-path (get-final-path file-root scene)]
     (let [result (fs/mod-time final-path)]
       {:final-path final-path
        :mtime result})))
 
-(defn get-mtime-loose [scene]
-  (-> scene get-mtime-wrapper :mtime))
+(defn get-mtime-loose [file-root scene]
+  (-> scene (get-mtime-wrapper file-root) :mtime))
 
 (defn get-mtime-strict [scene]
   (let [result (get-mtime-wrapper scene)]
@@ -68,21 +68,23 @@
 
 ;; Not really sure what's going to happen when the file doesn't exist, but here
 ;; goes nothing...
-(defn compare-scenes [x y]
-  (compare (get-mtime-loose x) (get-mtime-loose y)))
+(defn make-mtime-comparator [file-root]
+  (fn [x y]
+    (compare (get-mtime-loose file-root x) (get-mtime-loose file-root y))))
 
-(defn scenes-sorted-by-mtime [scene-data]
-  (sort compare-scenes
+(defn scenes-sorted-by-mtime [file-root scene-data]
+  (sort (make-mtime-comparator file-root)
         scene-data))
 
 (defn render-index [repository tag-name]
   {:headers {"Content-Type" "text/html; charset=UTF-8"}
    :body (search-result-template (data/query-by-tag repository tag-name))})
 
-(defn render-list-all [repository]
-  (let [all-scenes (data/list-all-scenes repository)]
+(defn render-list-all [configuration repository]
+  (let [all-scenes (data/list-all-scenes repository)
+        file-root (configuration/get-file-root configuration)]
     {:headers {"Content-Type" "text/html; charset=UTF-8"}
-     :body (search-result-template (scenes-sorted-by-mtime all-scenes))}))
+     :body (search-result-template (scenes-sorted-by-mtime file-root all-scenes))}))
 
 (defn render-view-tags [repository]
   {:headers {"Content-Type" "text/html; charset=UTF-8"}
@@ -101,7 +103,7 @@
 (defn make-app [{repository :repository}]
   (-> (routes
        (GET "/" [] (main-template))
-       (GET "/list" [] (render-list-all repository))
+       (GET "/list" [] (render-list-all configuration repository))
        (GET "/view-tags" [] (render-view-tags repository))
        (GET "/tag/:tag-name" [tag-name] (render-index repository tag-name))
        (GET "/next-scene" {params :params}
