@@ -100,7 +100,8 @@
      (filter (fn [x] (= (:watched x) watched?)) (scenes-sorted-by-mtime)))))
 
 ;; returns a function which is the handler
-(defn make-app [{repository :repository}]
+(defn make-app [{repository :repository
+                 configuration :configuration}]
   (-> (routes
        (GET "/" [] (main-template))
        (GET "/list" [] (render-list-all configuration repository))
