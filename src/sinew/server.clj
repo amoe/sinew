@@ -33,6 +33,14 @@
        (Exception. 
         (str "file has 1970 mtime, or could not be read: " (:final-path result)))))))
 
+(defn get-mtime-new [path]
+  (let [result (fs/mod-time path)]
+    (when (zero? result)
+      (throw 
+       (Exception. 
+        (str "file has 1970 mtime, or could not be read"))))
+    result))
+
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
   [:table :tbody :tr.file_] (html/clone-for [file file-list]
