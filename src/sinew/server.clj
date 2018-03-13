@@ -106,7 +106,7 @@
                  :as system}]
   (-> (routes
        (GET "/" [] (main-template))
-       (GET "/list" [] (render-list-all system repository))
+       (GET "/list" [] (render-list-all system))
        (GET "/view-tags" [] (render-view-tags repository))
        (GET "/tag/:tag-name" [tag-name] (render-index repository tag-name))
        (GET "/next-scene" {params :params}
