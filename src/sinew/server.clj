@@ -94,10 +94,15 @@
   (data/toggle-watched repository plaintext-name)
   (str "Toggled watched status for " plaintext-name))
 
-(defn pick-next-scene [watched?]
-   (:plaintext_name
-    (first
-     (filter (fn [x] (= (:watched x) watched?)) (scenes-sorted-by-mtime)))))
+
+;; XXX: Possible abstraction of this let block, it's shared with render-list-all
+(defn pick-next-scene [configuration repository watched?]
+  (let [all-scenes (data/list-all-scenes repository)
+        file-root (configuration/get-file-root configuration)]
+    (->> (scenes-sorted-by-mtime file-root all-scenes)
+         (filter #(= (:watched %) watched?))
+         first
+         :plaintext_name)))
 
 ;; returns a function which is the handler
 (defn make-app [{repository :repository
@@ -109,6 +114,8 @@
        (GET "/tag/:tag-name" [tag-name] (render-index repository tag-name))
        (GET "/next-scene" {params :params}
             (pick-next-scene
+             configuration
+             repository
              (Boolean/valueOf (get params "watched"))))
        (GET "/toggle-watched/:name" [name]
             (toggle-watched repository name))
