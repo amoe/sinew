@@ -12,6 +12,8 @@
                  [com.taoensso/truss "1.5.0"]
                  [enlive "1.1.5"]
                  [org.clojure/tools.logging "0.4.0"]
+                 [failjure "1.3.0"]
+                 [com.gearswithingears/shrubbery "0.4.1"]
                  [ch.qos.logback/logback-classic "1.1.3"]
                  [commons-io "2.4"]
                  [ring/ring-core "1.3.2"]
