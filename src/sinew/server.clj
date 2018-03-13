@@ -2,6 +2,7 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.middleware.params :as wp]
             [clojure.pprint :as pprint]
+            [failjure.core :as f]
             [sinew.system :as system]
             [clojure.tools.logging :refer [debugf]]
             [compojure.core :refer :all]
@@ -17,11 +18,7 @@
   (str file-root "/" (:scene_type scene) "/" (:filename scene)))
 
 
-(defn ^:private get-mtime-wrapper [scene file-root]
-  (let [final-path (get-final-path file-root scene)]
-    (let [result (fs/mod-time final-path)]
-      {:final-path final-path
-       :mtime result})))
+
 
 (defn get-mtime-loose [file-root scene]
   (-> scene (get-mtime-wrapper file-root) :mtime))
@@ -35,11 +32,23 @@
 
 (defn get-mtime-new [path]
   (let [result (fs/mod-time path)]
-    (when (zero? result)
-      (throw 
-       (Exception. 
-        (str "file has 1970 mtime, or could not be read"))))
-    result))
+    (if (zero? result)
+      (f/fail "file could not be read")
+      result)))
+
+;; user of mtime
+(defn mtime-user []
+  (let [files ["/etc/passwd" "/nonexistent"]]
+    (map (fn [p]
+           (f/attempt-all [mtime (get-mtime-new p)]
+             mtime
+             (f/when-failed [e]
+               (println e)
+               42)))   ;; the result is used as the result of expr
+         files)))
+
+;; try* can be used to wrap exception code in failures.
+                          
 
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
