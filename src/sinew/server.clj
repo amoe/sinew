@@ -5,7 +5,7 @@
             [failjure.core :as f]
             [sinew.filesystem :as filesystem]
             [sinew.system :as system]
-            [clojure.tools.logging :refer [debugf]]
+            [clojure.tools.logging :refer [debugf warnf]]
             [compojure.core :refer :all]
             [compojure.route :as route]
             [sinew.select-by-tag :as select-by-tag]
@@ -52,13 +52,21 @@
 (html/deftemplate main-template "templates/index.html" []
   [:head :title] (html/content "Sinew | usage page"))
 
+(defn time-or-bogus-value [filesystem path]
+  (f/attempt-all [mtime (filesystem/get-mtime filesystem path)]
+    mtime
+    (f/when-failed [e]
+      (warnf e)
+      0)))
+
+
 ;; Not really sure what's going to happen when the file doesn't exist, but here
 ;; goes nothing...
 (defn make-mtime-comparator [file-root filesystem]
   (fn [& scenes]
     (->> scenes
          (map #(get-final-path file-root %))
-         (map #(filesystem/get-mtime filesystem %))
+         (map #(time-or-bogus-value filesystem %))
          (apply compare))))
 
 (defn scenes-sorted-by-mtime [file-root filesystem scene-data]
