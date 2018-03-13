@@ -17,3 +17,6 @@
     ;; we should really be using Files.readAttributes() method, which allows
     ;; distinguishing the error cases, but blah.
     (%get-mtime path)))
+
+
+(defn new-filesystem [] (->FilesystemImpl))

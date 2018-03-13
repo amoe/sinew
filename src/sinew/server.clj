@@ -3,6 +3,7 @@
             [ring.middleware.params :as wp]
             [clojure.pprint :as pprint]
             [failjure.core :as f]
+            [sinew.filesystem :as filesystem]
             [sinew.system :as system]
             [clojure.tools.logging :refer [debugf]]
             [compojure.core :refer :all]
@@ -17,38 +18,6 @@
 (defn get-final-path [file-root scene]
   (str file-root "/" (:scene_type scene) "/" (:filename scene)))
 
-
-
-
-(defn get-mtime-loose [file-root scene]
-  (-> scene (get-mtime-wrapper file-root) :mtime))
-
-(defn get-mtime-strict [scene]
-  (let [result (get-mtime-wrapper scene)]
-    (when (zero? (:mtime result))
-      (throw 
-       (Exception. 
-        (str "file has 1970 mtime, or could not be read: " (:final-path result)))))))
-
-(defn get-mtime-new [path]
-  (let [result (fs/mod-time path)]
-    (if (zero? result)
-      (f/fail "file could not be read")
-      result)))
-
-;; user of mtime
-(defn mtime-user []
-  (let [files ["/etc/passwd" "/nonexistent"]]
-    (map (fn [p]
-           (f/attempt-all [mtime (get-mtime-new p)]
-             mtime
-             (f/when-failed [e]
-               (println e)
-               42)))   ;; the result is used as the result of expr
-         files)))
-
-;; try* can be used to wrap exception code in failures.
-                          
 
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
@@ -85,23 +54,30 @@
 
 ;; Not really sure what's going to happen when the file doesn't exist, but here
 ;; goes nothing...
-(defn make-mtime-comparator [file-root]
-  (fn [x y]
-    (compare (get-mtime-loose file-root x) (get-mtime-loose file-root y))))
+(defn make-mtime-comparator [file-root filesystem]
+  (fn [& scenes]
+    (->> scenes
+         (map #(get-final-path file-root %))
+         (map #(filesystem/get-mtime filesystem %))
+         (apply compare))))
 
-(defn scenes-sorted-by-mtime [file-root scene-data]
-  (sort (make-mtime-comparator file-root)
+(defn scenes-sorted-by-mtime [file-root filesystem scene-data]
+  (sort (make-mtime-comparator file-root filesystem)
         scene-data))
 
 (defn render-index [repository tag-name]
   {:headers {"Content-Type" "text/html; charset=UTF-8"}
    :body (search-result-template (data/query-by-tag repository tag-name))})
 
-(defn render-list-all [configuration repository]
+(defn render-list-all [{configuration :configuration
+                        repository :repository
+                        filesystem :filesystem}]
   (let [all-scenes (data/list-all-scenes repository)
         file-root (configuration/get-file-root configuration)]
     {:headers {"Content-Type" "text/html; charset=UTF-8"}
-     :body (search-result-template (scenes-sorted-by-mtime file-root all-scenes))}))
+     :body (search-result-template (scenes-sorted-by-mtime file-root
+                                                           filesystem
+                                                           all-scenes))}))
 
 (defn render-view-tags [repository]
   {:headers {"Content-Type" "text/html; charset=UTF-8"}
@@ -113,26 +89,29 @@
 
 
 ;; XXX: Possible abstraction of this let block, it's shared with render-list-all
-(defn pick-next-scene [configuration repository watched?]
+(defn pick-next-scene [{configuration :configuration
+                        repository :repository
+                        filesystem :filesystem} watched?]
   (let [all-scenes (data/list-all-scenes repository)
         file-root (configuration/get-file-root configuration)]
-    (->> (scenes-sorted-by-mtime file-root all-scenes)
+    (->> (scenes-sorted-by-mtime file-root filesystem all-scenes)
          (filter #(= (:watched %) watched?))
          first
          :plaintext_name)))
 
 ;; returns a function which is the handler
 (defn make-app [{repository :repository
-                 configuration :configuration}]
+                 configuration :configuration
+                 filesystem :filesystem
+                 :as system}]
   (-> (routes
        (GET "/" [] (main-template))
-       (GET "/list" [] (render-list-all configuration repository))
+       (GET "/list" [] (render-list-all system repository))
        (GET "/view-tags" [] (render-view-tags repository))
        (GET "/tag/:tag-name" [tag-name] (render-index repository tag-name))
        (GET "/next-scene" {params :params}
             (pick-next-scene
-             configuration
-             repository
+             system
              (Boolean/valueOf (get params "watched"))))
        (GET "/toggle-watched/:name" [name]
             (toggle-watched repository name))
