@@ -56,7 +56,7 @@
   (f/attempt-all [mtime (filesystem/get-mtime filesystem path)]
     mtime
     (f/when-failed [e]
-      (warnf e)
+      (warnf (f/message e))
       0)))
 
 
