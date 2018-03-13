@@ -1,7 +1,7 @@
 (ns sinew.unit-test
   (:require [clojure.test :refer :all]
-            [sinew.scan-filenames :as sut]))
+            [sinew.scan-filenames :as scan-filenames]))
 
 (deftest lowercase-works 
-  (let [result (sut/lowercase "Hello world")]
+  (let [result (scan-filenames/lowercase "Hello world")]
     (is (= "hello world" result))))
