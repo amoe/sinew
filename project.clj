@@ -29,7 +29,5 @@
   :aliases {"migrate"  ["run" "-m" "sinew.db-setup/migrate"]
             "rollback" ["run" "-m" "sinew.db-setup/rollback"]}
 
-  :ring {:handler sinew.server/app}
-  :main sinew.add-to-db
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
