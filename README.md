@@ -1,5 +1,14 @@
 # sinew
 
+> While Michael Angeloʼs Sistine roof
+> His ‘Morning’ and his ‘Night’ disclose
+> How sinew that has been  pulled tight,
+> Or it may be loosened in repose,
+> Can rule by supernatural right
+> Yet be but sinew.
+
+-- Yeats, _Michael Robartes and the Dancer_
+
 It's a pluggable media tracker and metadata scanner/organizer.  Sinew knows
 about the concept of a 'file root' and a 'scene type' and will allow you to
 track these things.  For instance, you can then query: "all videos by
