@@ -1,10 +1,10 @@
 # sinew
 
-> While Michael Angeloʼs Sistine roof
-> His ‘Morning’ and his ‘Night’ disclose
-> How sinew that has been  pulled tight,
-> Or it may be loosened in repose,
-> Can rule by supernatural right
+> While Michael Angeloʼs Sistine roof  
+> His ‘Morning’ and his ‘Night’ disclose  
+> How sinew that has been  pulled tight,  
+> Or it may be loosened in repose,  
+> Can rule by supernatural right  
 > Yet be but sinew.
 
 -- Yeats, _Michael Robartes and the Dancer_
