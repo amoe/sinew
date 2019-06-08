@@ -131,7 +131,7 @@
 (def lein-ring-handler nil)
 
 (defn initialize-handler! []
-  (when-not the-handler
+  (when-not lein-ring-handler
     (alter-var-root #'lein-ring-handler
                     (fn [_]
                       (make-app (system/build-system))))))
