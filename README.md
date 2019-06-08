@@ -36,8 +36,7 @@ After this, to start the server, do the following:
 The server starts on port 8000 by default.
 
 Or use the venerable `lein ring server-headless`, if you want to watch for
-server reloads.  In this case the server will start on port 3000.  *NOTE: This
-is currently not working.*
+server reloads.  In this case the server will start on port 3000.
 
 ## Usage -- Command line
 

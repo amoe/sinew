@@ -128,6 +128,15 @@
       prone/wrap-exceptions
       wp/wrap-params))
 
+(def lein-ring-handler nil)
+
+(defn initialize-handler! []
+  (when-not the-handler
+    (alter-var-root #'lein-ring-handler
+                    (fn [_]
+                      (make-app (system/build-system))))))
+
+(initialize-handler!)
 
 (defn run []
   (let [system (system/build-system)]
