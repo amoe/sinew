@@ -18,7 +18,7 @@
                  [commons-io "2.4"]
                  [ring/ring-core "1.7.1"]
                  [ring/ring-jetty-adapter "1.7.1"]
-                 [compojure "1.5.0"]
+                 [compojure "1.6.1"]
                  [prone "0.8.0"]
                  [me.raynes/fs "1.4.6"]
                  [org.clojure/core.match "0.3.0-alpha4"]
