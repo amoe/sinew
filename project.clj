@@ -25,7 +25,7 @@
                  [org.clojure/tools.cli "0.3.1"]]
 
   :plugins [[lein-ring "0.12.5"]]
-  :ring {:handler sinew.server/the-handler}
+  :ring {:handler sinew.server/lein-ring-handler}
 
   :aliases {"migrate"  ["run" "-m" "sinew.db-setup/migrate"]
             "rollback" ["run" "-m" "sinew.db-setup/rollback"]}
