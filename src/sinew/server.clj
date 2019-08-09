@@ -18,7 +18,6 @@
 (defn get-final-path [file-root scene]
   (str file-root "/" (:scene_type scene) "/" (:filename scene)))
 
-
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
   [:table :tbody :tr.file_] (html/clone-for [file file-list]
@@ -46,7 +45,6 @@
                      (html/content tag)
                      [:a.search-tag-link]
                      (html/set-attr :href (str "/tag/" tag)))))
-
 
 
 (html/deftemplate main-template "templates/index.html" []
@@ -128,15 +126,18 @@
       prone/wrap-exceptions
       wp/wrap-params))
 
-(def lein-ring-handler nil)
+(def root-handler nil)
 
 (defn initialize-handler! []
-  (when-not lein-ring-handler
-    (alter-var-root #'lein-ring-handler
+  (when-not root-handler
+    (alter-var-root #'root-handler
                     (fn [_]
                       (make-app (system/build-system))))))
 
-(initialize-handler!)
+(defn lein-ring-handler [req]
+  (initialize-handler!)
+  (root-handler req))
+
 
 (defn run []
   (let [system (system/build-system)]
