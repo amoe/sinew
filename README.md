@@ -58,7 +58,7 @@ You have to configure it before it will work.  It expects to find a file at
     :prefixes
      {:type1 {:url "http://www.site1.com/episode/"
               :selectors {:description [:div.desc]
-                          :tags [:div.tags a]}}}}
+                          :tags [:div.tags :a]}}}}
 
 Prefixes defines where to look for video descriptions.
 
@@ -73,6 +73,7 @@ tags, except that the selector for this case may return multiple elements.
 
 Not every video may have tags, and that's pretty fine.
 
+https://archive.org/details/AboutBan1935
 ## License
 
 Copyright © 2018 David Banks

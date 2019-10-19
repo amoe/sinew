@@ -1,10 +1,16 @@
 (ns sinew.scan-page
-  (:require [net.cgrand.enlive-html :as html]
+  (:require [net.cgrand.enlive-html :as html :refer [attr=]]
             [clojure.java.io :as io]
             [clj-http.client :as client]
             [clojure.string :as string]
             [sinew.utility :as utility]
             [sinew.configuration :as configuration]))
+
+(def archive-stuff 
+  {:prefixes
+   {:archive {:url "https://archive.org/details/"
+              :selectors {:description [:div#descript]
+                          :tags [(attr= :itemprop "keywords") :a]}}}})
 
 (defn get-html-resource-input [resolve-url model]
   (-> (str resolve-url model)

@@ -1,6 +1,5 @@
 (ns sinew.scan-filenames
-  (:require [net.cgrand.enlive-html :as html]
-            [clojure.java.io :as io]
+  (:require [clojure.java.io :as io]
             [clojure.string :as string]
             [clojure.pprint :as pprint]
             [me.raynes.fs :as fs]
