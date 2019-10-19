@@ -3,7 +3,7 @@
             [clojure.string :as string]
             [clojure.pprint :as pprint]
             [me.raynes.fs :as fs]
-            [sinew.scan-page]))
+            [sinew.jsoup-scanner :as jsoup-scanner]))
 
 (declare scan-files
          scan-filename
@@ -27,9 +27,9 @@
   (let [data (read-string (slurp path))]
     (doseq [rec data]
        (try
-         (let [page (sinew.scan-page/get-page type (:new rec))]
-           (let [desc (sinew.scan-page/extract-description page)
-                 tags (sinew.scan-page/extract-tags page)]
+         (let [page (jsoup-scanner/get-page type (:new rec))]
+           (let [desc (jsoup-scanner/extract-description page)
+                 tags (jsoup-scanner/extract-tags page)]
              (let [outrec {:filename (:original rec)
                            :name (:new rec)
                            :description desc

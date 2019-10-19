@@ -1,6 +1,6 @@
 (ns sinew.add-to-db
   (:require [clojure.pprint :as pprint]
-            [sinew.scan-page :as scan-page]
+            [sinew.jsoup-scanner :as jsoup-scanner]
             [clojure.tools.logging :refer [fatalf]]
             [taoensso.truss :refer :all]
             [sinew.filesystem-tools :as filesystem-tools]
@@ -56,12 +56,12 @@
   (have! keyword? scene-type)
   (prn opts)
   (try
-    (let [page (scan-page/get-page prefixes
+    (let [page (jsoup-scanner/get-page prefixes
                                    (keyword scene-type)
                                    plaintext-name)]
-      (let [description (scan-page/extract-description page
+      (let [description (jsoup-scanner/extract-description page
                                                        (get-description-selector prefixes scene-type))
-            tags (scan-page/extract-tags page (get-tags-selector prefixes scene-type))]
+            tags (jsoup-scanner/extract-tags page (get-tags-selector prefixes scene-type))]
         (when (empty? description)
           (throw (ex-info "Empty description, perhaps the scan has failed"
                           {:cause :null-description-after-scan})))

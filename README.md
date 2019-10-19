@@ -74,6 +74,7 @@ tags, except that the selector for this case may return multiple elements.
 Not every video may have tags, and that's pretty fine.
 
 https://archive.org/details/AboutBan1935
+
 ## License
 
 Copyright © 2018 David Banks
