@@ -18,6 +18,8 @@
       :body
       utility/string->stream))
 
+;; Returns a html-resource,  but it should be treated as an opaque handle that
+;; can only be passed to extract-tags and extract-description.
 (defn get-page [prefixes type model]
   (let [resolve-url (get-in prefixes [type :url])]
     (if-not resolve-url
