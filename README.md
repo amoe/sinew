@@ -57,8 +57,8 @@ You have to configure it before it will work.  It expects to find a file at
                :password "xyzzy"}
     :prefixes
      {:type1 {:url "http://www.site1.com/episode/"
-              :selectors {:description [:div.desc]
-                          :tags [:div.tags :a]}}}}
+              :selectors {:description "div.desc"
+                          :tags "div.tags a"}}}}
 
 Prefixes defines where to look for video descriptions.
 

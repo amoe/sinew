@@ -2,7 +2,7 @@
   (:gen-class)
   (:require [clojure.java.jdbc :as j]
             [clj-time.coerce :as c]
-            [sinew.scan-page :as sp]
+            [sinew.jsoup-scanner :as sp]
             [sinew.scan-filenames :as sf]))
 
 (defn ack [path]

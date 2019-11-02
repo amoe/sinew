@@ -11,3 +11,7 @@
 
 (deftest extract-description-works
   (is (= "foo" (jsoup-scanner/extract-description fakedata "span"))))
+
+  (def html "<div class=\"tags\"><a href=\"#foo\">foo</a><a href=\"#bar\">bar</a></div>")
+
+  (def selector "div.tags a")
