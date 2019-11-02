@@ -21,7 +21,7 @@
                  [compojure "1.6.1"]
                  [prone "0.8.0"]
                  [me.raynes/fs "1.4.6"]
-                 [org.clojure/core.match "0.3.0-alpha4"]
+                 [org.clojure/core.match "0.3.0"]
                  [org.clojure/tools.cli "0.3.1"]]
 
   :plugins [[lein-ring "0.12.5"]]
