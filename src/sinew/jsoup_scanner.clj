@@ -4,6 +4,8 @@
             [clj-http.client :as client])
   (:import [org.jsoup Jsoup]))
 
+  (def foo "dd[itemprop=keywords] a")
+
 (defn get-html-from-string [string]
   (Jsoup/parse string))
 

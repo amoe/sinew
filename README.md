@@ -45,6 +45,15 @@ one of them is `add-to-db`.
 
     lein run -m sinew.add-to-db
 
+Typical use looks something like this:
+
+    amoe@steenvlieg $ lein run -m sinew.add-to-db  ~/AboutBan1935.mp4 AboutBan1935 archive-video
+    {:description ""}
+    "Complete presentation of the banana industry from the clearing of the jungle and the planting to the shipment of the fruit to the American markets."
+    ("Agriculture: Bananas" "Central America")
+    Will force: 
+    Moving to file: /home/amoe/sinew-pool/archive-video/AboutBan1935.mp4
+
 ## Options
 
 You have to configure it before it will work.  It expects to find a file at
@@ -60,20 +69,27 @@ You have to configure it before it will work.  It expects to find a file at
               :selectors {:description "div.desc"
                           :tags "div.tags a"}}}}
 
-Prefixes defines where to look for video descriptions.
+Prefixes defines where to look for video metadata.  Here's an example prefix
+configuration for videos from Archive.org:
 
-One example is given of the site here.  At the moment the code assumes that each
+    {:archive-video {:url "https://archive.org/details/"
+                      :selectors
+                      {:description "div#descript"
+                       :tags "dd[itemprop=keywords] a"}}
+
+At the moment the code assumes that each
 video has a 'plaintext name', which is basically the machine-readable id for
 that video, and that this id can simply be appended to the `:url` to get the
 metadata page for the video.  That plaintext name is given by the user when
-calling `add-to-db`.  Then the description is looked up with the Enlive selector
-(which is `[:div.desc]` in this example).  The text-content of that element
+calling `add-to-db`.  Then the description is looked up with the CSS selector
+(which is `"div.desc"` in this example).  The text-content of that element
 forms the description that's stored in Sinew's database.  The same goes for the
 tags, except that the selector for this case may return multiple elements.
 
 Not every video may have tags, and that's pretty fine.
 
-https://archive.org/details/AboutBan1935
+When using an attribute selector in CSS, don't quote the attribute value, just
+leave it bare, like `a[href=foo]` not `a[href="foo"]`.
 
 ## License
 
