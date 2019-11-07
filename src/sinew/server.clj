@@ -13,6 +13,7 @@
             [prone.middleware :as prone]
             [net.cgrand.enlive-html :as html]
             [sinew.configuration :as configuration]
+            [clojure.java.io :as io]
             [me.raynes.fs :as fs]))
 
 (defn get-final-path [file-root scene]
@@ -50,13 +51,17 @@
 (html/deftemplate main-template "templates/index.html" []
   [:head :title] (html/content "Sinew | usage page"))
 
+(html/deftemplate video-template "templates/video.html" [name]
+;  [:head :title] (html/content "Sinew | video"))
+
+  [:body :video] (html/set-attr :src (str "/stream/" name)))
+
 (defn time-or-bogus-value [filesystem path]
   (f/attempt-all [mtime (filesystem/get-mtime filesystem path)]
     mtime
     (f/when-failed [e]
       (warnf (f/message e))
       0)))
-
 
 ;; Not really sure what's going to happen when the file doesn't exist, but here
 ;; goes nothing...
@@ -105,6 +110,11 @@
          first
          :plaintext_name)))
 
+(defn stream-file [{configuration :configuration} name]
+  (let [file (io/file (configuration/get-file-root configuration) name)]
+    (io/reader file)    ;; this will throw if not found -- otherwise error hidden
+    file))
+
 ;; returns a function which is the handler
 (defn make-app [{repository :repository
                  configuration :configuration
@@ -112,6 +122,8 @@
                  :as system}]
   (-> (routes
        (GET "/" [] (main-template))
+       (GET "/stream/:name" [name] (stream-file system name))
+       (GET "/video/:name" [name] (video-template name))
        (GET "/list" [] (render-list-all system))
        (GET "/view-tags" [] (render-view-tags repository))
        (GET "/tag/:tag-name" [tag-name] (render-index repository tag-name))
