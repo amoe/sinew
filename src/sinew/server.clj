@@ -2,6 +2,7 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.middleware.params :as wp]
             [clojure.pprint :as pprint]
+            [clojure.string :as string]
             [failjure.core :as f]
             [sinew.filesystem :as filesystem]
             [sinew.system :as system]
@@ -111,9 +112,12 @@
          :plaintext_name)))
 
 (defn stream-file [{configuration :configuration} name]
-  (let [file (io/file (configuration/get-file-root configuration) name)]
-    (io/reader file)    ;; this will throw if not found -- otherwise error hidden
-    file))
+  (let [file-root (configuration/get-file-root configuration)]
+    (let [file (io/file file-root name)]
+      (when-not (string/starts-with? (.getCanonicalPath file) file-root)
+        (throw (Exception. "cannot read outside of root")))
+      (io/reader file)    ;; this will throw if not found -- otherwise error hidden
+      file)))
 
 ;; returns a function which is the handler
 (defn make-app [{repository :repository
