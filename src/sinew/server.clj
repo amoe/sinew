@@ -20,6 +20,8 @@
 (defn get-final-path [file-root scene]
   (str file-root "/" (:scene_type scene) "/" (:filename scene)))
 
+;;
+
 (html/deftemplate search-result-template "templates/search-result.html"
   [file-list]
   [:table :tbody :tr.file_] (html/clone-for [file file-list]
@@ -27,6 +29,8 @@
                    [:td.watched]
                    (html/html-content
                     (if (:watched file) "&#x2713;" "&#x2717;"))
+                   [:td :a.video-link] (html/set-attr :href
+                                                      (str "/video/" (:scene_type file) "/" (:filename file)))
                    [:td :a.toggle-link] (html/set-attr
                                          :href (str "/toggle-watched/"
                                                     (:plaintext_name file)))
@@ -126,8 +130,8 @@
                  :as system}]
   (-> (routes
        (GET "/" [] (main-template))
-       (GET "/stream/:name" [name] (stream-file system name))
-       (GET "/video/:name" [name] (video-template name))
+       (GET "/stream/*" [*] (stream-file system *))
+       (GET "/video/*" [*] (video-template *))
        (GET "/list" [] (render-list-all system))
        (GET "/view-tags" [] (render-view-tags repository))
        (GET "/tag/:tag-name" [tag-name] (render-index repository tag-name))
