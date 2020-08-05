@@ -130,8 +130,8 @@
                  :as system}]
   (-> (routes
        (GET "/" [] (main-template))
-       (GET "/stream/*" [*] (stream-file system *))
-       (GET "/video/*" [*] (video-template *))
+       (GET ["/stream/:subpath" :subpath #".*"] [subpath] (stream-file system subpath))
+       (GET ["/video/:subpath" :subpath #".*"] [subpath] (video-template subpath))
        (GET "/list" [] (render-list-all system))
        (GET "/view-tags" [] (render-view-tags repository))
        (GET "/tag/:tag-name" [tag-name] (render-index repository tag-name))

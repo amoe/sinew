@@ -1,8 +1,10 @@
 (ns sinew.toggle-watched
-  (:require [sinew.data-service :as data]))
+  (:require [sinew.data-service :as data]
+            [sinew.system :as system]))
 
 (defn -main
   [& args]
-  (data/toggle-watched (first args)))
+  (let [system (system/build-system)]
+    (data/toggle-watched (:repository system) (first args))))
 
 
