@@ -27,9 +27,5 @@ jobs:
         with:
           lein: 2.9.1
 
-      - name: Execute clojure code on Linux and MacOS
-        run: clojure -e "(+ 1 1)"
-        shell: bash
-        
       - name: Get leiningen version
         run: lein -v        
