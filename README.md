@@ -24,7 +24,7 @@ the database.  Last tested with Leiningen 2.8.1
 
 ## Usage -- Web server
 
-Before you can run the server, you'll have to apply the database schema.  You
+**Before you can run the server, you'll have to apply the database schema**.  You
 can do that by running:
 
     lein migrate

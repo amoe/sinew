@@ -4,7 +4,7 @@
             [clojure.tools.logging :refer [fatalf]]
             [taoensso.truss :refer :all]
             [sinew.filesystem-tools :as filesystem-tools]
-            [sinew.file-renamer]
+            [sinew.file-renamer :as file-renamer]
             [sinew.system :as system]
             [sinew.data-service :as data]
             [clojure.core.match :refer [match]]
@@ -19,25 +19,29 @@
 (def cli-options
   [["-F" "--force-scene" "Force addition even if scene not found"]
    ["-f" "--force" "Overwrite existing destination files"]
+   ["-c" "--copy" "Copy instead of moving source file"]
    ["-d" "--description DESC" "Provide description" :default ""]])
 
 (defn -main
   [& args]
   (let [system (system/build-system)
-        parsed (cli/parse-opts args cli-options)]
-    (match (:arguments parsed)
+        parsed (cli/parse-opts args cli-options)
+        arguments (:arguments parsed)
+        options (:options parsed)]
+    (match arguments
       [filename plaintext-name scene-type]
       (let [scene-info (retrieve-scene-info (configuration/get-prefixes (:configuration system))
                                             plaintext-name
                                             (keyword scene-type)
-                                            (:options parsed))]
+                                            options)]
           (insert-scene system
                         filename
                         plaintext-name
                         (:description scene-info)
                         (:tags scene-info)
                         scene-type
-                        (:force (:options parsed))))
+                        (:force options)
+                        (:copy options)))
       :else
       (do 
         (fatalf "usage: FILENAME PLAINTEXT-NAME SCENE-TYPE")
@@ -74,13 +78,14 @@
 
 (defn insert-scene
   [{configuration :configuration
-    repository :repository} filename plaintext-name description tags scene-type force?]
+    repository :repository}
+   filename plaintext-name description tags scene-type force? copy?]
   (prn description)
   (prn tags)
 
   (println (str "Will force: " force?))
 
-  (let [extension (sinew.file-renamer/get-extension filename)]
+  (let [extension (file-renamer/get-extension filename)]
     (let [new-name (str (configuration/get-file-root configuration)
                         "/"
                         scene-type
@@ -91,7 +96,9 @@
 
       (filesystem-tools/mkdir-parents! new-name)
       (println (str "Moving to file: " new-name))
-      (sinew.file-renamer/move-file filename new-name force?)
+      (if copy?
+        (file-renamer/copy-file filename new-name force?)
+        (file-renamer/move-file filename new-name force?))
       (let [scene-id (data/insert-scene repository
                                         nil   ; ???
                                          plaintext-name
